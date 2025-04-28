@@ -1,9 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { useState } from "react";
-import { Button as HeroButton } from "@heroui/react";
 import { Button } from "@/components/ui/Button";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
