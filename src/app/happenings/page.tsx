@@ -37,7 +37,7 @@ const EventCard = ({
         <p className="text-gray-400 text-sm mb-3">{description}</p>
         <div className="flex justify-between items-center">
           <span className="text-gray-500 text-xs">{location}</span>
-          <Button customVariant="primary" size="sm">
+          <Button customVariant="primary" size="xs">
             Join In
           </Button>
         </div>

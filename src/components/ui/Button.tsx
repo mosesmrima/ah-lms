@@ -14,14 +14,14 @@ interface CustomButtonProps extends Omit<ButtonProps, 'variant' | 'size'> {
 const Button = React.forwardRef<HTMLButtonElement, CustomButtonProps>(
   ({ className, customVariant = "primary", size = "md", fullWidth = false, children, ...props }, ref) => {
     // Base styles that apply to all buttons
-    const baseStyle = "flex-1 h-[50px] px-6 py-1 rounded-[12px] text-center text-base font-bold leading-5 tracking-[0.25px]";
+    const baseStyle = "flex rounded-[12px] text-center font-bold leading-5 tracking-[0.25px]";
     
     // Size variations
     const sizeStyles = {
-      xs: "px-3 py-1 text-xs",
-      sm: "px-4 py-1.5 text-sm",
-      md: "px-5 py-2 text-base",
-      lg: "px-6 py-3 text-lg",
+      xs: "h-[30px] px-3 py-1 text-xs",
+      sm: "h-[40px] px-4 py-1.5 text-sm",
+      md: "h-[50px] px-5 py-2 text-base",
+      lg: "h-[60px] px-6 py-3 text-lg",
       xl: "h-[60px] px-4 py-1 text-base tracking-[0.25px] rounded-[12px]"
     };
     
