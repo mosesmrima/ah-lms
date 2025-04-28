@@ -25,7 +25,7 @@ while (COURSES.length < 8) {
   COURSES.push({ ...COURSES[0], id: COURSES.length + 1 });
 }
 
-function CourseCard({ title, image, author, authorAvatar }: any) {
+function CourseCard({ title, image, author, authorAvatar }: unkown) {
   return (
     <div className="group relative bg-[#1E1E1E] rounded-xl border-2 border-transparent overflow-hidden transition hover:shadow-lg hover:border-red-600 min-h-[400px] flex flex-col justify-end">
       {/* Image fills the card */}

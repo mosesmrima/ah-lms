@@ -37,74 +37,78 @@ const WhyChooseUsSection = () => {
   ];
 
   return (
-    <section className="py-16 px-6 md:px-12 bg-black text-white">
-      <div className="container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          {/* IMAGE & GLOWING CIRCLES LEFT */}
-          <div className="relative flex justify-center items-center min-h-[420px]">
-            {/* Random glowing circles */}
-            {/* Fixed position circles with different sizes */}
-            {/* Big circle */}
-            <div className="absolute w-[200px] h-[200px] top-[50px] left-[10px] blur-xl opacity-90 z-0 pointer-events-none">
-              <div className="w-full h-full rounded-full bg-gradient-to-br from-red-500 to-yellow-500 animate-pulse" />
-            </div>
-            
-            {/* Medium circle 1 */}
-            <div className="absolute w-[120px] h-[120px] top-[20px] right-[60px] blur-xl opacity-90 z-0 pointer-events-none">
-              <div className="w-full h-full rounded-full bg-gradient-to-br from-pink-500 to-red-600 animate-pulse" />
-            </div>
-            
-            {/* Medium circle 2 */}
-            <div className="absolute w-[130px] h-[130px] bottom-[40px] left-[40px] blur-xl opacity-90 z-0 pointer-events-none">
-              <div className="w-full h-full rounded-full bg-gradient-to-br from-yellow-400 to-red-500 animate-pulse" />
-            </div>
-            
-            {/* Small circle 1 */}
-            <div className="absolute w-[80px] h-[80px] top-[150px] right-[30px] blur-xl opacity-90 z-0 pointer-events-none">
-              <div className="w-full h-full rounded-full bg-gradient-to-br from-red-600 to-pink-400 animate-pulse" />
-            </div>
-            
-            {/* Small circle 2 */}
-            <div className="absolute w-[70px] h-[70px] bottom-[20px] right-[80px] blur-xl opacity-90 z-0 pointer-events-none">
-              <div className="w-full h-full rounded-full bg-gradient-to-br from-pink-500 to-yellow-500 animate-pulse" />
-            </div>
-            {/* Main image always on top */}
-            <div className="relative z-10">
-              <Image
-                src="/images/Sally-4.png"
-                alt="Student learning"
-                width={340}
-                height={340}
-                className="object-contain drop-shadow-2xl"
-                priority
-              />
-            </div>
-          </div>
+		<section className="py-16 px-6 md:px-12 bg-black text-white">
+			<div className="container mx-auto">
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+					{/* IMAGE & GLOWING CIRCLES LEFT */}
+					<div className="relative flex justify-center items-center min-h-[420px]">
+						{/* Random glowing circles */}
+						{/* Fixed position circles with different sizes */}
+						{/* Big circle */}
+						<div className="absolute w-[200px] h-[200px] top-[50px] left-[10px] blur-xl opacity-90 z-0 pointer-events-none">
+							<div className="w-full h-full rounded-full bg-gradient-to-br from-red-500 to-yellow-500 animate-pulse" />
+						</div>
 
-          {/* FEATURES RIGHT */}
-          <div>
-            <h2 className="text-3xl font-bold mb-6">Why Choose Us: The Preferred Learning Platform</h2>
-            <p className="text-gray-300 mb-8">
-              We provide a comprehensive learning experience with the best instructors, flexible learning options, and career support to help you succeed in today's competitive job market.
-            </p>
-            <div className="space-y-6">
-              {features.map((feature) => (
-                <div key={feature.id} className="flex">
-                  <div className="flex-shrink-0 mt-1">
-                    {feature.icon}
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="text-xl font-semibold mb-1">{feature.title}</h3>
-                    <p className="text-gray-400">{feature.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+						{/* Medium circle 1 */}
+						<div className="absolute w-[120px] h-[120px] top-[20px] right-[60px] blur-xl opacity-90 z-0 pointer-events-none">
+							<div className="w-full h-full rounded-full bg-gradient-to-br from-pink-500 to-red-600 animate-pulse" />
+						</div>
+
+						{/* Medium circle 2 */}
+						<div className="absolute w-[130px] h-[130px] bottom-[40px] left-[40px] blur-xl opacity-90 z-0 pointer-events-none">
+							<div className="w-full h-full rounded-full bg-gradient-to-br from-yellow-400 to-red-500 animate-pulse" />
+						</div>
+
+						{/* Small circle 1 */}
+						<div className="absolute w-[80px] h-[80px] top-[150px] right-[30px] blur-xl opacity-90 z-0 pointer-events-none">
+							<div className="w-full h-full rounded-full bg-gradient-to-br from-red-600 to-pink-400 animate-pulse" />
+						</div>
+
+						{/* Small circle 2 */}
+						<div className="absolute w-[70px] h-[70px] bottom-[20px] right-[80px] blur-xl opacity-90 z-0 pointer-events-none">
+							<div className="w-full h-full rounded-full bg-gradient-to-br from-pink-500 to-yellow-500 animate-pulse" />
+						</div>
+						{/* Main image always on top */}
+						<div className="relative z-10">
+							<Image
+								src="/images/Sally-4.png"
+								alt="Student learning"
+								width={340}
+								height={340}
+								className="object-contain drop-shadow-2xl"
+								priority
+							/>
+						</div>
+					</div>
+
+					{/* FEATURES RIGHT */}
+					<div>
+						<h2 className="text-3xl font-bold mb-6">
+							Why Choose Us: The Preferred Learning Platform
+						</h2>
+						<p className="text-gray-300 mb-8">
+							We provide a comprehensive learning experience with the best
+							instructors, flexible learning options, and career support to help
+							you succeed in today&apos;s competitive job market.
+						</p>
+						<div className="space-y-6">
+							{features.map((feature) => (
+								<div key={feature.id} className="flex">
+									<div className="flex-shrink-0 mt-1">{feature.icon}</div>
+									<div className="ml-4">
+										<h3 className="text-xl font-semibold mb-1">
+											{feature.title}
+										</h3>
+										<p className="text-gray-400">{feature.description}</p>
+									</div>
+								</div>
+							))}
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	);
 };
 
 export default WhyChooseUsSection;
