@@ -25,5 +25,32 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+/* Container for consistent max-width on large screens */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Navbar full-width border */
+nav {
+  border-bottom: 1px solid #4f4f4f;
+}
+
+/* Navbar link hover */
+nav a:hover {
+  color: #E7343A !important;
+}
+
+/* Floating animation for hero image */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
 }
