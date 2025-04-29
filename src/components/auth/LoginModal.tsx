@@ -1,4 +1,5 @@
 import { Fragment, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Dialog, Transition } from '@headlessui/react';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
@@ -9,14 +10,28 @@ interface LoginModalProps {
 }
 
 const LoginModal = ({ isOpen, onClose, onOpenSignUp }: LoginModalProps) => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log('Login attempt with:', { email, password });
+    setIsLoading(true);
+    
+    // Simulate login process
+    setTimeout(() => {
+      // In a real app, this would be an API call to authenticate
+      console.log('Login attempt with:', { email, password });
+      
+      // Redirect to dashboard after successful login
+      router.push('/dashboard');
+      
+      // Close the modal
+      onClose();
+      setIsLoading(false);
+    }, 1000);
   };
 
   const handleSignUpClick = () => {
@@ -94,9 +109,18 @@ const LoginModal = ({ isOpen, onClose, onOpenSignUp }: LoginModalProps) => {
 
 									<button
 										type="submit"
-										className="w-full rounded-lg bg-[#ed3237] py-4 text-white font-medium hover:bg-red-600 transition-colors"
+										className="w-full rounded-lg bg-[#ed3237] py-4 text-white font-medium hover:bg-red-600 transition-colors relative"
+										disabled={isLoading}
 									>
-										Login
+										{isLoading ? (
+                      <span className="flex items-center justify-center">
+                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Processing...
+                      </span>
+                    ) : 'Login'}
 									</button>
 								</form>
 

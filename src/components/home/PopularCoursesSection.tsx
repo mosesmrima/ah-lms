@@ -62,7 +62,7 @@ const PopularCoursesSection = () => {
     <section className="bg-black py-10 sm:py-12 md:py-16 px-4 sm:px-6 md:px-12">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 md:mb-0">Popular Courses</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 md:mb-0">My Library</h2>
           <div className="flex flex-wrap justify-start md:justify-end gap-2 sm:gap-3 md:gap-4 mt-2 md:mt-0 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
             {FILTERS.map((f) => (
               <Button

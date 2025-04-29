@@ -5,7 +5,8 @@ import { Button as HeroButton, ButtonProps } from "@heroui/react";
 import { cn } from "@/lib/utils";
 
 // Omit the conflicting props from HeroUI's ButtonProps
-interface CustomButtonProps extends Omit<ButtonProps, 'variant' | 'size'> {
+interface CustomButtonProps extends Omit<ButtonProps, 'variant' | 'size' | 'onClick'> {
+  onClick?: (event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>) => void;
   customVariant?: "primary" | "secondary" | "outline" | "filter" | "card" | "happenings" | "newsletter";
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   fullWidth?: boolean;
@@ -60,6 +61,7 @@ const Button = React.forwardRef<HTMLButtonElement, CustomButtonProps>(
           widthStyle,
           className
         )} 
+        onPress={(e) => props.onClick?.(e as any)}
         {...props}
       >
         {children}
