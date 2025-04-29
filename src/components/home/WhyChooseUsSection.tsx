@@ -37,11 +37,11 @@ const WhyChooseUsSection = () => {
   ];
 
   return (
-		<section className="py-16 px-6 md:px-12 bg-black text-white">
+		<section className="py-10 sm:py-12 md:py-16 px-4 sm:px-6 md:px-12 bg-black text-white">
 			<div className="container mx-auto">
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 md:gap-12 items-center">
 					{/* IMAGE & GLOWING CIRCLES LEFT */}
-					<div className="relative flex justify-center items-center min-h-[420px]">
+					<div className="relative flex justify-center items-center min-h-[300px] sm:min-h-[350px] md:min-h-[420px]">
 						{/* Random glowing circles */}
 						{/* Fixed position circles with different sizes */}
 						{/* Big circle */}
@@ -75,7 +75,7 @@ const WhyChooseUsSection = () => {
 								alt="Student learning"
 								width={340}
 								height={340}
-								className="object-contain drop-shadow-2xl"
+								className="object-contain drop-shadow-2xl w-[250px] h-[250px] sm:w-[300px] sm:h-[300px] md:w-[340px] md:h-[340px]"
 								priority
 							/>
 						</div>
@@ -83,23 +83,23 @@ const WhyChooseUsSection = () => {
 
 					{/* FEATURES RIGHT */}
 					<div>
-						<h2 className="text-3xl font-bold mb-6">
+						<h2 className="text-2xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6">
 							Why Choose Us: The Preferred Learning Platform
 						</h2>
-						<p className="text-gray-300 mb-8">
+						<p className="text-gray-300 text-sm sm:text-base mb-6 sm:mb-8">
 							We provide a comprehensive learning experience with the best
 							instructors, flexible learning options, and career support to help
 							you succeed in today&apos;s competitive job market.
 						</p>
-						<div className="space-y-6">
+						<div className="space-y-4 sm:space-y-6">
 							{features.map((feature) => (
 								<div key={feature.id} className="flex">
 									<div className="flex-shrink-0 mt-1">{feature.icon}</div>
-									<div className="ml-4">
-										<h3 className="text-xl font-semibold mb-1">
+									<div className="ml-3 sm:ml-4">
+										<h3 className="text-lg sm:text-xl font-semibold mb-1">
 											{feature.title}
 										</h3>
-										<p className="text-gray-400">{feature.description}</p>
+										<p className="text-gray-400 text-sm sm:text-base">{feature.description}</p>
 									</div>
 								</div>
 							))}

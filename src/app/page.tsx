@@ -8,19 +8,31 @@ import {
   WhyChooseUsSection,
   FAQSection
 } from "@/components/home";
+import PageTransition from "@/components/animations/PageTransition";
+import AnimateOnScroll from "@/components/animations/AnimateOnScroll";
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main>
-        <HeroSection />
-        <DealsSection />
-        <PopularCoursesSection />
-        <WhyChooseUsSection />
-        <FAQSection />
-      </main>
-      <Footer />
-    </div>
+    <PageTransition>
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <main>
+          <HeroSection />
+          <AnimateOnScroll direction="up" delay={0.2}>
+            <DealsSection />
+          </AnimateOnScroll>
+          <AnimateOnScroll direction="up" delay={0.3}>
+            <PopularCoursesSection />
+          </AnimateOnScroll>
+          <AnimateOnScroll direction="up" delay={0.4}>
+            <WhyChooseUsSection />
+          </AnimateOnScroll>
+          <AnimateOnScroll direction="up" delay={0.5}>
+            <FAQSection />
+          </AnimateOnScroll>
+        </main>
+        <Footer />
+      </div>
+    </PageTransition>
   );
 }

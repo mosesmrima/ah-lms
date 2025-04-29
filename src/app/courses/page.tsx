@@ -5,6 +5,9 @@ import Image from 'next/image';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/Button';
+import PageTransition from '@/components/animations/PageTransition';
+import AnimateOnScroll from '@/components/animations/AnimateOnScroll';
+import StaggeredAnimation from '@/components/animations/StaggeredAnimation';
 
 // Course card component
 const CourseCard = ({ title, instructor, image, index }: {
@@ -13,7 +16,7 @@ const CourseCard = ({ title, instructor, image, index }: {
   image: string;
   index: number;
 }) => (
-  <div className="bg-[#0A1A0A] border border-gray-700 hover:border-[#E7343A] transition-colors duration-300 rounded-lg overflow-hidden">
+  <div className="bg-[#0A1A0A] border border-gray-700 hover:border-[#E7343A] transition-all duration-300 rounded-lg overflow-hidden h-full flex flex-col hover:shadow-lg hover:shadow-[#E7343A]/20 hover:-translate-y-1">
     <div className="relative h-48">
       <Image 
         src={image} 
@@ -23,9 +26,9 @@ const CourseCard = ({ title, instructor, image, index }: {
         priority={index < 3}
       />
     </div>
-    <div className="p-4">
-      <h3 className="text-xl font-bold text-center mb-2">{title}</h3>
-      <div className="flex items-center justify-center mb-4">
+    <div className="p-5 flex flex-col flex-grow">
+      <h3 className="text-xl font-bold text-center mb-3">{title}</h3>
+      <div className="flex items-center justify-center mb-5">
         <div className="w-8 h-8 rounded-full bg-gray-600 mr-2 overflow-hidden">
           <Image 
             src="/images/Sally-4.png" 
@@ -74,22 +77,23 @@ export default function CoursesPage() {
   ];
 
   return (
-    <>
+    <PageTransition>
       <div className="min-h-screen bg-black text-white">
         <Navbar />
         
-        <main className="container mx-auto px-4 py-16">
+        <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-28 pb-12 sm:pb-16 lg:pb-20">
           {/* Filter Section */}
-          <div className="bg-[#111] border border-gray-700 rounded-lg pt-8 px-6 pb-6 mb-10 shadow-lg">
-            <div className="flex flex-col justify-between items-start gap-6">
-              <div className="w-full">
-                <h3 className="text-white text-lg font-medium mb-4 flex items-center">
+          <AnimateOnScroll direction="down" className="w-full">
+            <div className="bg-[#111] border border-gray-700 rounded-lg p-6 md:p-8 mb-12 shadow-lg">
+              <div className="flex flex-col justify-between items-start gap-6 w-full">
+                <div className="w-full">
+                <h3 className="text-white text-lg font-medium mb-5 flex items-center">
                   <svg className="w-5 h-5 mr-2 text-[#E7343A]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                   </svg>
                   Filter Courses
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                   <div className="relative group">
                     <input 
                       type="text" 
@@ -134,21 +138,21 @@ export default function CoursesPage() {
                     </button>
                   </div>
                 </div>
+                </div>
               </div>
             </div>
-          </div>
-          
+          </AnimateOnScroll>
           {/* Sidebar and Courses Grid */}
-          <div className="flex flex-col md:flex-row gap-8">
+          <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
             {/* Sidebar */}
-            <div className="w-full md:w-64 flex-shrink-0">
-              <div className="space-y-4">
+            <AnimateOnScroll direction="left" className="w-full md:w-64 flex-shrink-0 mb-8 md:mb-0">
+              <div className="space-y-6">
                 {/* Course Type Filters */}
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {categories.map((category, index) => (
                     <div 
                       key={index} 
-                      className={`cursor-pointer py-1 ${category === 'All Course' ? 'text-white' : 'text-gray-400 hover:text-white'}`}
+                      className={`cursor-pointer py-2 px-2 rounded hover:bg-gray-800 transition-colors ${category === 'All Course' ? 'text-white font-medium' : 'text-gray-400 hover:text-white'}`}
                     >
                       {category}
                     </div>
@@ -156,22 +160,22 @@ export default function CoursesPage() {
                 </div>
                 
                 {/* Topic Filters */}
-                <div className="space-y-2 mt-8">
+                <div className="space-y-3 mt-10">
                   {topics.map((topic, index) => (
                     <div 
                       key={index} 
-                      className={`cursor-pointer py-1 ${topic === 'Cyber Security' ? 'text-[#E7343A]' : 'text-gray-400 hover:text-white'}`}
+                      className={`cursor-pointer py-2 px-2 rounded hover:bg-gray-800 transition-colors ${topic === 'Cyber Security' ? 'text-[#E7343A] font-medium' : 'text-gray-400 hover:text-white'}`}
                     >
                       {topic}
                     </div>
                   ))}
                 </div>
               </div>
-            </div>
-          
+            </AnimateOnScroll>
+            
             {/* Courses Grid */}
             <div className="flex-1">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <StaggeredAnimation className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                 {courses.map((course, index) => (
                   <CourseCard 
                     key={index}
@@ -181,34 +185,34 @@ export default function CoursesPage() {
                     index={index}
                   />
                 ))}
-              </div>
+              </StaggeredAnimation>
               
               {/* Pagination */}
-              <div className="flex justify-center mt-12 mb-16 gap-3">
-                <button className="px-4 py-2 border border-gray-600 rounded-md hover:bg-gray-800 hover:border-[#E7343A] transition-colors duration-300 flex items-center">
-                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <AnimateOnScroll direction="up" delay={0.3} className="flex flex-wrap justify-center mt-16 mb-8 gap-2 md:gap-3">
+                <button className="px-3 sm:px-4 py-2 border border-gray-600 rounded-md hover:bg-gray-800 hover:border-[#E7343A] transition-colors duration-300 flex items-center text-sm sm:text-base">
+                  <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
                   </svg>
                   First
                 </button>
-                <button className="px-4 py-2 bg-[#E7343A] rounded-md hover:bg-[#c62d32] transition-colors duration-300 font-medium">1</button>
-                <button className="px-4 py-2 border border-gray-600 rounded-md hover:bg-gray-800 hover:border-[#E7343A] transition-colors duration-300">2</button>
-                <button className="px-4 py-2 border border-gray-600 rounded-md hover:bg-gray-800 hover:border-[#E7343A] transition-colors duration-300">3</button>
-                <button className="px-4 py-2 border border-gray-600 rounded-md hover:bg-gray-800 hover:border-[#E7343A] transition-colors duration-300">4</button>
-                <button className="px-4 py-2 border border-gray-600 rounded-md hover:bg-gray-800 hover:border-[#E7343A] transition-colors duration-300">5</button>
-                <button className="px-4 py-2 border border-gray-600 rounded-md hover:bg-gray-800 hover:border-[#E7343A] transition-colors duration-300 flex items-center">
+                <button className="px-3 sm:px-4 py-2 bg-[#E7343A] rounded-md hover:bg-[#c62d32] transition-colors duration-300 font-medium text-sm sm:text-base min-w-[32px] sm:min-w-[40px]">1</button>
+                <button className="px-3 sm:px-4 py-2 border border-gray-600 rounded-md hover:bg-gray-800 hover:border-[#E7343A] transition-colors duration-300 text-sm sm:text-base min-w-[32px] sm:min-w-[40px]">2</button>
+                <button className="px-3 sm:px-4 py-2 border border-gray-600 rounded-md hover:bg-gray-800 hover:border-[#E7343A] transition-colors duration-300 text-sm sm:text-base min-w-[32px] sm:min-w-[40px]">3</button>
+                <button className="hidden sm:block px-3 sm:px-4 py-2 border border-gray-600 rounded-md hover:bg-gray-800 hover:border-[#E7343A] transition-colors duration-300 text-sm sm:text-base min-w-[32px] sm:min-w-[40px]">4</button>
+                <button className="hidden sm:block px-3 sm:px-4 py-2 border border-gray-600 rounded-md hover:bg-gray-800 hover:border-[#E7343A] transition-colors duration-300 text-sm sm:text-base min-w-[32px] sm:min-w-[40px]">5</button>
+                <button className="px-3 sm:px-4 py-2 border border-gray-600 rounded-md hover:bg-gray-800 hover:border-[#E7343A] transition-colors duration-300 flex items-center text-sm sm:text-base">
                   Last
-                  <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <svg className="w-3 h-3 sm:w-4 sm:h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
                   </svg>
                 </button>
-              </div>
+              </AnimateOnScroll>
             </div>
           </div>
         </main>
         
         <Footer />
       </div>
-    </>
+    </PageTransition>
   );
 }

@@ -12,8 +12,8 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="w-full py-6 bg-black text-white border-b border-[#4f4f4f]">
-        <div className="container mx-auto flex items-center justify-between px-6 md:px-12">
+      <nav className="w-full py-4 md:py-6 bg-black text-white border-b border-[#4f4f4f] sticky top-0 z-50">
+        <div className="container mx-auto flex items-center justify-between px-4 sm:px-6 md:px-12">
           <div className="flex items-center">
             <Link href="/">
               <div className="flex items-center">
@@ -22,7 +22,8 @@ const Navbar = () => {
                   alt="Africa Tech"
                   width={150} 
                   height={150}
-                  style={{ width: 'auto', height: 'auto' }}
+                  style={{ width: 'auto', height: 'auto', maxHeight: '50px' }}
+                  className="w-auto h-auto max-h-[40px] md:max-h-[50px]"
                 />
               </div>
             </Link>
@@ -72,41 +73,48 @@ const Navbar = () => {
               )}
             </button>
           </div>
-
-          {/* Mobile Navigation */}
-          {isMenuOpen && (
-            <div className="md:hidden absolute top-16 left-0 right-0 bg-black p-4 z-50">
-              <div className="flex flex-col space-y-4">
-                <Link 
-                  href="/courses" 
-                  className="relative px-3 py-2 transition-colors hover:text-[#E7343A] active:scale-95 focus:outline-none rounded-md"
-                >
-                  Courses
-                </Link>
-                <Link 
-                  href="/happenings" 
-                  className="relative px-3 py-2 transition-colors hover:text-[#E7343A] active:scale-95 focus:outline-none rounded-md"
-                >
-                  Happenings
-                </Link>
-                <Button 
-                  variant="ghost" 
-                  className="text-white active:scale-95 transition-transform focus:outline-none" 
-                  onClick={() => setIsLoginModalOpen(true)}
-                >
-                  Sign In
-                </Button>
-                <Button 
-                  className="bg-[#E7343A] hover:bg-red-700 text-white active:scale-95 transition-transform focus:outline-none" 
-                  onClick={() => setIsSignUpModalOpen(true)}
-                >
-                  Sign Up
-                </Button>
-              </div>
-            </div>
-          )}
         </div>
       </nav>
+
+      {/* Mobile Navigation */}
+      {isMenuOpen && (
+        <div className="md:hidden fixed top-[60px] sm:top-[68px] left-0 right-0 bg-black border-t border-[#333] p-4 z-40 shadow-lg">
+          <div className="container mx-auto flex flex-col space-y-4">
+            <Link 
+              href="/courses" 
+              className="relative px-3 py-2 transition-colors hover:text-[#E7343A] active:scale-95 focus:outline-none rounded-md"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Courses
+            </Link>
+            <Link 
+              href="/happenings" 
+              className="relative px-3 py-2 transition-colors hover:text-[#E7343A] active:scale-95 focus:outline-none rounded-md"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Happenings
+            </Link>
+            <button
+              className="text-left relative px-3 py-2 transition-colors hover:text-[#E7343A] active:scale-95 focus:outline-none rounded-md"
+              onClick={() => {
+                setIsMenuOpen(false);
+                setIsLoginModalOpen(true);
+              }}
+            >
+              Sign In
+            </button>
+            <button
+              className="text-left relative px-3 py-2 bg-[#E7343A] hover:bg-red-700 text-white active:scale-95 focus:outline-none rounded-md"
+              onClick={() => {
+                setIsMenuOpen(false);
+                setIsSignUpModalOpen(true);
+              }}
+            >
+              Sign Up
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Login Modal */}
       <LoginModal 

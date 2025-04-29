@@ -4,6 +4,9 @@ import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import PageTransition from "@/components/animations/PageTransition";
+import AnimateOnScroll from "@/components/animations/AnimateOnScroll";
+import StaggeredAnimation from "@/components/animations/StaggeredAnimation";
 
 // Event card component for the upcoming events section
 const EventCard = ({ 
@@ -112,7 +115,7 @@ const Tweet = ({
   );
 };
 
-export default function HappeningsPage() {
+function HappeningsPage() {
   // Sample data for events
   const events = [
     {
@@ -207,120 +210,136 @@ export default function HappeningsPage() {
   ];
 
   return (
-    <>
-      <Navbar />
-      <main className="min-h-screen bg-black text-white pb-16">
-      {/* Hero Section */}
-      <section className="relative bg-black py-12 px-6 md:px-12 lg:px-16">
-        <div className="container mx-auto">
-          <div className="w-full max-w-[1318px] h-auto px-8 md:px-20 py-12 bg-stone-900 rounded-[30px] mx-auto overflow-hidden">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-8 md:gap-12 w-full">
-              <div className="w-full md:w-[55%] flex flex-col justify-start items-start gap-6 md:gap-10">
-                <div className="flex flex-col justify-start items-start gap-4 md:gap-6">
-                  <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-2">
-                    Africahackon Academy Happenings: Elevate Your Learning
-                  </h1>
-                  <p className="text-gray-300 text-base md:text-lg">
-                    Explore a wealth of learning opportunities with our diverse selection of webinars, thought-provoking podcasts, and much more. Be the first to know about upcoming events with our live announcements, keeping you informed and inspired.
-                  </p>
-                </div>
-                <div className="flex justify-start items-center gap-4 w-full">
-                  <Button customVariant="primary" className="flex-1">
-                    Sign Up
-                  </Button>
-                  <Button customVariant="secondary" className="flex-1">
-                    Join Our Newsletter
-                  </Button>
+    <PageTransition>
+      <div className="min-h-screen bg-black text-white">
+        <Navbar />
+        <main className="pb-16">
+          {/* Hero Section */}
+          <AnimateOnScroll direction="down" className="w-full">
+            <section className="relative bg-black py-8 sm:py-10 md:py-12 px-4 sm:px-6 md:px-12 lg:px-16">
+              <div className="container mx-auto">
+                <div className="w-full max-w-[1318px] h-auto px-4 sm:px-6 md:px-12 lg:px-20 py-8 sm:py-10 md:py-12 bg-stone-900 rounded-[20px] sm:rounded-[30px] mx-auto overflow-hidden">
+                  <div className="flex flex-col md:flex-row justify-between items-center gap-6 sm:gap-8 md:gap-12 w-full">
+                    <div className="w-full md:w-[55%] flex flex-col justify-start items-start gap-4 sm:gap-6 md:gap-10">
+                      <div className="flex flex-col justify-start items-start gap-3 sm:gap-4 md:gap-6">
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-1 sm:mb-2">
+                          Africahackon Academy Happenings: Elevate Your Learning
+                        </h1>
+                        <p className="text-gray-300 text-sm sm:text-base md:text-lg">
+                          Explore a wealth of learning opportunities with our diverse selection of webinars, thought-provoking podcasts, and much more. Be the first to know about upcoming events with our live announcements, keeping you informed and inspired.
+                        </p>
+                      </div>
+                      <div className="flex flex-col sm:flex-row justify-start items-center gap-3 sm:gap-4 w-full">
+                        <Button customVariant="primary" className="w-full sm:flex-1">
+                          Sign Up
+                        </Button>
+                        <Button customVariant="secondary" className="w-full sm:flex-1">
+                          Join Our Newsletter
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="w-full md:w-[45%] flex justify-center items-center mt-6 md:mt-0">
+                      <div className="relative w-full max-w-[300px] sm:max-w-[350px] md:max-w-[400px] aspect-square">
+                        <Image 
+                          src="/images/happenings.png" 
+                          alt="Happenings illustration" 
+                          width={400} 
+                          height={400}
+                          className="object-contain w-full h-full"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="w-full md:w-[45%] flex justify-center items-center">
-                <div className="relative w-full max-w-[400px] aspect-square">
-                  <Image 
-                    src="/images/happenings.png" 
-                    alt="Happenings illustration" 
-                    width={400} 
-                    height={400}
-                    className="object-contain w-full h-full"
-                  />
+            </section>
+          </AnimateOnScroll>
+
+          {/* Partners */}
+          <AnimateOnScroll direction="up" delay={0.2} className="w-full">
+            <section className="py-6 sm:py-8">
+              <div className="container mx-auto px-4 sm:px-6 md:px-12">
+                <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-8 md:gap-16">
+                  <Image src="/images/image 5.png" alt="Business Daily" width={120} height={40} className="object-contain w-[80px] sm:w-[100px] md:w-[120px]" />
+                  <Image src="/images/image 6.png" alt="TechCabal" width={120} height={40} className="object-contain w-[80px] sm:w-[100px] md:w-[120px]" />
+                  <Image src="/images/image 7.png" alt="Business Insider" width={120} height={40} className="object-contain w-[80px] sm:w-[100px] md:w-[120px]" />
+                  <Image src="/images/image 8.png" alt="CIO Africa" width={120} height={40} className="object-contain w-[80px] sm:w-[100px] md:w-[120px]" />
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
+            </section>
+          </AnimateOnScroll>
 
-      {/* Partners */}
-      <section className="py-8">
-        <div className="container mx-auto px-6 md:px-12">
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
-            <Image src="/images/image 5.png" alt="Business Daily" width={120} height={40} className="object-contain" />
-            <Image src="/images/image 6.png" alt="TechCabal" width={120} height={40} className="object-contain" />
-            <Image src="/images/image 7.png" alt="Business Insider" width={120} height={40} className="object-contain" />
-            <Image src="/images/image 8.png" alt="CIO Africa" width={120} height={40} className="object-contain" />
-          </div>
-        </div>
-      </section>
-
-      {/* Upcoming Events */}
-      <section className="py-12 px-6 md:px-12">
-        <div className="container mx-auto">
-          <h2 className="text-2xl font-bold mb-8">Upcoming Events</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {events.map(event => (
-              <EventCard 
-                key={event.id}
-                date={event.date}
-                title={event.title}
-                description={event.description}
-                location={event.location}
-                imageSrc={event.imageSrc}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Other Updates */}
-      <section className="py-12 px-6 md:px-12">
-        <div className="container mx-auto">
-          <h2 className="text-2xl font-bold mb-8">Other Updates</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="md:col-span-1">
-              {updates.map(update => (
-                <div key={update.id} className="mb-6">
-                  <UpdateCard 
-                    title={update.title}
-                    description={update.description}
-                    buttonText={update.buttonText}
-                    imageSrc={update.imageSrc}
-                  />
-                </div>
-              ))}
-            </div>
-            <div className="md:col-span-1">
-              <div className="bg-[#111] rounded-lg overflow-hidden border border-[#333] p-6">
-                <h3 className="text-xl font-bold text-white mb-4">X Feeds</h3>
-                <div className="max-h-[500px] overflow-y-auto pr-2">
-                  {tweets.map(tweet => (
-                    <Tweet 
-                      key={tweet.id}
-                      username={tweet.username}
-                      handle={tweet.handle}
-                      content={tweet.content}
-                      profilePic={tweet.profilePic}
+          {/* Upcoming Events */}
+          <AnimateOnScroll direction="up" delay={0.3} className="w-full">
+            <section className="py-8 sm:py-10 md:py-12 px-4 sm:px-6 md:px-12">
+              <div className="container mx-auto">
+                <h2 className="text-xl sm:text-2xl font-bold mb-6 sm:mb-8">Upcoming Events</h2>
+                <StaggeredAnimation className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                  {events.map(event => (
+                    <EventCard 
+                      key={event.id}
+                      date={event.date}
+                      title={event.title}
+                      description={event.description}
+                      location={event.location}
+                      imageSrc={event.imageSrc}
                     />
                   ))}
-                </div>
-                <Button customVariant="secondary" className="text-[#E7343A] w-full mt-4">
-                  View More
-                </Button>
+                </StaggeredAnimation>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-    <Footer />    
-    </>
+            </section>
+          </AnimateOnScroll>
+
+          {/* Other Updates */}
+          <AnimateOnScroll direction="up" delay={0.4} className="w-full">
+            <section className="py-8 sm:py-10 md:py-12 px-4 sm:px-6 md:px-12">
+              <div className="container mx-auto">
+                <h2 className="text-xl sm:text-2xl font-bold mb-6 sm:mb-8">Other Updates</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="md:col-span-1">
+                    <StaggeredAnimation className="space-y-4">
+                      {updates.map(update => (
+                        <div key={update.id} className="mb-4 sm:mb-6">
+                          <UpdateCard 
+                            title={update.title}
+                            description={update.description}
+                            buttonText={update.buttonText}
+                            imageSrc={update.imageSrc}
+                          />
+                        </div>
+                      ))}
+                    </StaggeredAnimation>
+                  </div>
+                  <div className="md:col-span-1 mt-4 md:mt-0">
+                    <div className="bg-[#111] rounded-lg overflow-hidden border border-[#333] p-4 sm:p-6">
+                      <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">X Feeds</h3>
+                      <div className="max-h-[400px] sm:max-h-[500px] overflow-y-auto pr-2">
+                        <StaggeredAnimation className="space-y-4" staggerChildren={0.05}>
+                          {tweets.map(tweet => (
+                            <Tweet 
+                              key={tweet.id}
+                              username={tweet.username}
+                              handle={tweet.handle}
+                              content={tweet.content}
+                              profilePic={tweet.profilePic}
+                            />
+                          ))}
+                        </StaggeredAnimation>
+                      </div>
+                      <Button customVariant="secondary" className="text-[#E7343A] w-full mt-3 sm:mt-4">
+                        View More
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </AnimateOnScroll>
+        </main>
+        <Footer />
+      </div>
+    </PageTransition>
   );
-}
+};
+
+export default HappeningsPage;
