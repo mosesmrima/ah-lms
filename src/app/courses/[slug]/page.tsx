@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import DashboardNavbar from "@/components/layout/DashboardNavbar";
+import Footer from "@/components/layout/Footer";
+import RelatedCoursesSection from "@/components/courses/RelatedCoursesSection";
 
 // Mock data for the Data Security course
 const courseData = {
@@ -228,29 +230,8 @@ export default function CourseDetails() {
               </div>
             </div>
             
-            <div>
-              <h2 className="text-xl font-semibold mb-4">Related Courses</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                {course.relatedCourses.map((relatedCourse) => (
-                  <div key={relatedCourse.id} className="bg-[#1A1A1A] rounded-lg overflow-hidden">
-                    <div className="relative h-[150px]">
-                      <Image
-                        src={relatedCourse.image}
-                        alt={relatedCourse.title}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                    <div className="p-4">
-                      <h3 className="font-medium mb-1">{relatedCourse.title}</h3>
-                      <p className="text-sm text-gray-400">by {relatedCourse.instructor}</p>
-                      <button className="w-full bg-red-600 hover:bg-red-700 text-white text-sm py-2 rounded mt-3 transition-colors">
-                        Start Learning
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div className="bg-black">
+              <RelatedCoursesSection />
             </div>
           </div>
         )}
@@ -278,52 +259,7 @@ export default function CourseDetails() {
       </div>
       
       {/* Footer */}
-      <div className="mt-auto bg-[#111] py-6">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div>
-              <h3 className="text-sm font-semibold mb-3">Category</h3>
-              <ul className="text-xs text-gray-400 space-y-2">
-                <li><Link href="#">Security</Link></li>
-                <li><Link href="#">Crypto Currency</Link></li>
-                <li><Link href="#">Cyber Threat</Link></li>
-                <li><Link href="#">Programming & Tech</Link></li>
-                <li><Link href="#">Financial Education</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold mb-3">About</h3>
-              <ul className="text-xs text-gray-400 space-y-2">
-                <li><Link href="#">About Us</Link></li>
-                <li><Link href="#">Press & News</Link></li>
-                <li><Link href="#">Privacy Policy</Link></li>
-                <li><Link href="#">Contact Us</Link></li>
-                <li><Link href="#">Intellectual Property Claims</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold mb-3">Support</h3>
-              <ul className="text-xs text-gray-400 space-y-2">
-                <li><Link href="#">Help & Support</Link></li>
-                <li><Link href="#">Trust & Safety</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold mb-3">Community</h3>
-              <ul className="text-xs text-gray-400 space-y-2">
-                <li><Link href="#">Events</Link></li>
-                <li><Link href="#">Blog</Link></li>
-                <li><Link href="#">Forum</Link></li>
-                <li><Link href="#">Community Standards</Link></li>
-                <li><Link href="#">Podcast</Link></li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-8 text-center text-xs text-gray-500">
-            © {new Date().getFullYear()} AfricaHackon Academy. All rights reserved.
-          </div>
-        </div>
-      </div>
+      <Footer />
     </div>
   );
 }
