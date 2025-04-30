@@ -1,6 +1,6 @@
 "use client";
 
-import { Footer } from "@/components/layout";
+import { PageLayout } from "@/components/layout";
 import DashboardNavbar from "@/components/layout/DashboardNavbar";
 import Image from "next/image";
 
@@ -75,10 +75,8 @@ export default function MyLearnings() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-black text-white">
-      <DashboardNavbar user={{ name: "John Doe" }} />
-      <div className="h-8"></div>
-      <main className="flex-grow container mx-auto px-4 py-8">
+    <PageLayout>
+      <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-2xl font-bold mb-2">My Learning</h1>
           <p className="text-gray-400">These are the courses you have life time access to</p>
@@ -96,11 +94,10 @@ export default function MyLearnings() {
             <CourseCard
               key={course.id}
               {...course}
-            />
+           />
           ))}
         </div>
-      </main>
-      <Footer />
-    </div>
+      </div>
+    </PageLayout>
   );
 }

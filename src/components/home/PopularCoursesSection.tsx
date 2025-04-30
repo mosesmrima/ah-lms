@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import Image from "next/image";
 import { Button } from "@/components/ui/Button";
+import { CourseCard } from "@/components/courses";
 
 const FILTERS = [
   { label: "Web3", value: "web3" },
@@ -23,35 +23,6 @@ const COURSES = [
 ];
 while (COURSES.length < 8) {
   COURSES.push({ ...COURSES[0], id: COURSES.length + 1 });
-}
-type CourseCardProps = {
-	title: string;
-	image: string;
-	author: string;
-	authorAvatar: string;
-};
-function CourseCard({ title, image, author, authorAvatar }: CourseCardProps) {
-  return (
-    <div className="group relative bg-[#1E1E1E] rounded-xl border-2 border-transparent overflow-hidden transition hover:shadow-lg hover:border-red-600 min-h-[320px] sm:min-h-[350px] md:min-h-[400px] flex flex-col justify-end">
-      {/* Image fills the card */}
-      <Image
-        src={image}
-        alt={title}
-        fill
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        className="object-cover"
-      />
-      {/* Gradient overlay with content */}
-      <div className="absolute bottom-0 left-0 w-full pt-12 sm:pt-16 pb-4 sm:pb-6 px-3 sm:px-5 bg-gradient-to-t from-red-700/90 to-[#1E1E1E]/80 flex flex-col justify-end">
-        <h3 className="font-bold text-lg sm:text-xl md:text-2xl text-white mb-2 text-center drop-shadow">{title}</h3>
-        <div className="flex items-center justify-center mb-3 sm:mb-4">
-          <Image src={authorAvatar} alt={author} width={40} height={40} className="rounded-full aspect-square object-cover w-8 h-8 sm:w-10 sm:h-10 mr-2" />
-          <span className="text-sm sm:text-base text-white">by <span className="text-red-300">{author}</span></span>
-        </div>
-        <Button customVariant="primary" className="w-full text-sm sm:text-base md:text-lg py-2 sm:py-3 mt-2">Start Learning</Button>
-      </div>
-    </div>
-  );
 }
 
 const PopularCoursesSection = () => {

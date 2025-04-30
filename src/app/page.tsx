@@ -1,6 +1,6 @@
 "use client";
 
-import { Navbar, Footer } from "@/components/layout";
+import { PageLayout } from "@/components/layout";
 import {
   HeroSection,
   DealsSection,
@@ -14,26 +14,21 @@ import AnimateOnScroll from "@/components/animations/AnimateOnScroll";
 export default function Home() {
   return (
     <PageTransition>
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
-        <div className="h-8"></div>
-        <main>
-          <HeroSection />
-          <AnimateOnScroll direction="up" delay={0.2}>
-            <DealsSection />
-          </AnimateOnScroll>
-          <AnimateOnScroll direction="up" delay={0.3}>
-            <PopularCoursesSection />
-          </AnimateOnScroll>
-          <AnimateOnScroll direction="up" delay={0.4}>
-            <WhyChooseUsSection />
-          </AnimateOnScroll>
-          <AnimateOnScroll direction="up" delay={0.5}>
-            <FAQSection />
-          </AnimateOnScroll>
-        </main>
-        <Footer />
-      </div>
+      <PageLayout>
+        <HeroSection />
+        <AnimateOnScroll direction="up" delay={0.2}>
+          <DealsSection />
+        </AnimateOnScroll>
+        <AnimateOnScroll direction="up" delay={0.3}>
+          <PopularCoursesSection />
+        </AnimateOnScroll>
+        <AnimateOnScroll direction="up" delay={0.4}>
+          <WhyChooseUsSection />
+        </AnimateOnScroll>
+        <AnimateOnScroll direction="up" delay={0.5}>
+          <FAQSection />
+        </AnimateOnScroll>
+      </PageLayout>
     </PageTransition>
   );
 }

@@ -2,50 +2,14 @@
 
 import React from 'react';
 import Image from 'next/image';
-import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
+import { PageLayout } from '@/components/layout';
+import { CourseCard } from '@/components/courses';
 import { Button } from '@/components/ui/Button';
 import PageTransition from '@/components/animations/PageTransition';
 import AnimateOnScroll from '@/components/animations/AnimateOnScroll';
 import StaggeredAnimation from '@/components/animations/StaggeredAnimation';
 
-// Course card component
-const CourseCard = ({ title, instructor, image, index }: {
-  title: string;
-  instructor: string;
-  image: string;
-  index: number;
-}) => (
-  <div className="bg-[#0A1A0A] border border-gray-700 hover:border-[#E7343A] transition-all duration-300 rounded-lg overflow-hidden h-full flex flex-col hover:shadow-lg hover:shadow-[#E7343A]/20 hover:-translate-y-1">
-    <div className="relative h-48">
-      <Image 
-        src={image} 
-        alt={title}
-        fill
-        className="object-cover"
-        priority={index < 3}
-      />
-    </div>
-    <div className="p-5 flex flex-col flex-grow">
-      <h3 className="text-xl font-bold text-center mb-3">{title}</h3>
-      <div className="flex items-center justify-center mb-5">
-        <div className="w-8 h-8 rounded-full bg-gray-600 mr-2 overflow-hidden">
-          <Image 
-            src="/images/Sally-4.png" 
-            alt={instructor}
-            width={32}
-            height={32}
-            className="object-cover"
-          />
-        </div>
-        <span className="text-sm text-gray-300">by {instructor}</span>
-      </div>
-      <Button customVariant="primary" fullWidth onPress={() => {}}>
-        Start Learning
-      </Button>
-    </div>
-  </div>
-);
+// Using the shared CourseCard component from src/components/courses/CourseCard.tsx
 
 export default function CoursesPage() {
   // Course data
@@ -78,11 +42,8 @@ export default function CoursesPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-black text-white">
-        <Navbar />
-        <div className="h-8"></div>
-        
-        <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-28 pb-12 sm:pb-16 lg:pb-20">
+      <PageLayout>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-28 pb-12 sm:pb-16 lg:pb-20">
           {/* Filter Section */}
           <AnimateOnScroll direction="down" className="w-full">
             <div className="bg-[#111] border border-gray-700 rounded-lg p-6 md:p-8 mb-12 shadow-lg">
@@ -181,7 +142,8 @@ export default function CoursesPage() {
                   <CourseCard 
                     key={index}
                     title={course.title}
-                    instructor={course.instructor}
+                    author={course.instructor}
+                    authorAvatar="/images/Sally-4.png"
                     image={course.image}
                     index={index}
                   />
@@ -210,10 +172,8 @@ export default function CoursesPage() {
               </AnimateOnScroll>
             </div>
           </div>
-        </main>
-        
-        <Footer />
-      </div>
+        </div>
+      </PageLayout>
     </PageTransition>
   );
 }

@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import { PageLayout } from "@/components/layout";
 import PageTransition from "@/components/animations/PageTransition";
 import AnimateOnScroll from "@/components/animations/AnimateOnScroll";
 import StaggeredAnimation from "@/components/animations/StaggeredAnimation";
@@ -211,10 +210,8 @@ function HappeningsPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-black text-white">
-        <Navbar />
-        <div className="h-8"></div>
-        <main className="pb-16">
+      <PageLayout>
+        <div className="pb-16">
           {/* Hero Section */}
           <AnimateOnScroll direction="down" className="w-full">
             <section className="relative bg-black py-8 sm:py-10 md:py-12 px-4 sm:px-6 md:px-12 lg:px-16">
@@ -336,9 +333,8 @@ function HappeningsPage() {
               </div>
             </section>
           </AnimateOnScroll>
-        </main>
-        <Footer />
-      </div>
+        </div>
+      </PageLayout>
     </PageTransition>
   );
 };
