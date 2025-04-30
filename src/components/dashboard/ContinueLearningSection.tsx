@@ -21,9 +21,9 @@ const ScheduleCard = ({ title, description }: { title: string; description: stri
           <CalendarIcon />
         </div>
         <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
-          <div className="self-stretch justify-start text-white text-base font-bold font-['Satoshi'] tracking-tight">{title}</div>
-          <div className="self-stretch justify-start text-white text-xs font-normal font-['Satoshi'] tracking-tight">{description}</div>
-          <div className="self-stretch justify-start text-red-500 text-[10px] font-normal font-['Satoshi'] tracking-tight">Get Started</div>
+          <div className="self-stretch justify-start text-white text-base font-bold font-['helvetica'] tracking-tight">{title}</div>
+          <div className="self-stretch justify-start text-white text-xs font-normal font-['helvetica'] tracking-tight">{description}</div>
+          <div className="self-stretch justify-start text-red-500 text-[10px] font-normal font-['helvetica'] tracking-tight">Get Started</div>
         </div>
       </div>
     </div>
@@ -42,10 +42,10 @@ const CourseCard = ({ title, courseCategory, image, lectureTime }: CourseCardPro
           className="w-32 h-48 rounded-xl object-cover"
         />
         <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
-          <div className="self-stretch justify-start text-white text-base font-bold font-['Satoshi'] tracking-tight">{title}</div>
-          <div className="self-stretch justify-start text-white text-xs font-normal font-['Satoshi'] tracking-tight">Course: {courseCategory}</div>
+          <div className="self-stretch justify-start text-white text-base font-bold font-['helvetica'] tracking-tight">{title}</div>
+          <div className="self-stretch justify-start text-white text-xs font-normal font-['helvetica'] tracking-tight">Course: {courseCategory}</div>
           <div className="w-48 h-[5px] bg-zinc-300 rounded-[5px]" />
-          <div className="self-stretch justify-start text-stone-300 text-[10px] font-normal font-['Satoshi'] tracking-tight">Lecture - {lectureTime} Minutes</div>
+          <div className="self-stretch justify-start text-stone-300 text-[10px] font-normal font-['helvetica'] tracking-tight">Lecture - {lectureTime} Minutes</div>
         </div>
       </div>
     </div>

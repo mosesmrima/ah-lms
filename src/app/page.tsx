@@ -16,6 +16,7 @@ export default function Home() {
     <PageTransition>
       <div className="min-h-screen flex flex-col">
         <Navbar />
+        <div className="h-8"></div>
         <main>
           <HeroSection />
           <AnimateOnScroll direction="up" delay={0.2}>

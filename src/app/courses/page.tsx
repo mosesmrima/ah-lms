@@ -40,7 +40,7 @@ const CourseCard = ({ title, instructor, image, index }: {
         </div>
         <span className="text-sm text-gray-300">by {instructor}</span>
       </div>
-      <Button customVariant="primary" fullWidth>
+      <Button customVariant="primary" fullWidth onPress={() => {}}>
         Start Learning
       </Button>
     </div>
@@ -80,6 +80,7 @@ export default function CoursesPage() {
     <PageTransition>
       <div className="min-h-screen bg-black text-white">
         <Navbar />
+        <div className="h-8"></div>
         
         <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-28 pb-12 sm:pb-16 lg:pb-20">
           {/* Filter Section */}

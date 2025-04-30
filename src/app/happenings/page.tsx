@@ -213,6 +213,7 @@ function HappeningsPage() {
     <PageTransition>
       <div className="min-h-screen bg-black text-white">
         <Navbar />
+        <div className="h-8"></div>
         <main className="pb-16">
           {/* Hero Section */}
           <AnimateOnScroll direction="down" className="w-full">

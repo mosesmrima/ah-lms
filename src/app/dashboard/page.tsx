@@ -1,6 +1,7 @@
 "use client";
 
-import { Navbar, Footer } from "@/components/layout";
+import { Footer } from "@/components/layout";
+import DashboardNavbar from "@/components/layout/DashboardNavbar";
 import { Button } from "@/components/ui/Button";
 import { PopularCoursesSection } from "@/components/home";
 import { UserHeroSection, ContinueLearningSection } from "@/components/dashboard";
@@ -52,7 +53,8 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen flex flex-col bg-black text-white">
-        <Navbar />
+        <DashboardNavbar user={{ name: "John Doe" }} />
+        <div className="h-8"></div>
         <main>
           <UserHeroSection />
           
@@ -88,15 +90,15 @@ export default function Dashboard() {
                       <p className="text-xl font-normal font-helvetica leading-7 text-zinc-100">{recommendedCourse.description}</p>
                     </div>
                     <div className="flex flex-col gap-2">
-                      <p className="text-base font-normal font-satoshi leading-snug text-zinc-100">
+                      <p className="text-base font-normal font-helvetica leading-snug text-zinc-100">
                         By <span className="text-red-500 font-bold">{recommendedCourse.instructor}</span>
                       </p>
-                      <p className="text-base font-normal font-satoshi leading-snug text-zinc-100">
+                      <p className="text-base font-normal font-helvetica leading-snug text-zinc-100">
                         {recommendedCourse.lectures} Lectures - {recommendedCourse.level}
                       </p>
                     </div>
                   </div>
-                  <Button customVariant="primary" size="xl" fullWidth>
+                  <Button customVariant="primary" size="xl" fullWidth onPress={() => {}}>
                     Start Now!
                   </Button>
                 </div>
