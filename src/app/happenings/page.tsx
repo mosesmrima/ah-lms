@@ -49,7 +49,9 @@ const EventCard = ({
 };
 
 // Update card component for the other updates section
-const UpdateCard = ({ 
+// Component defined for future use
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _UpdateCard = ({ 
   title, 
   description, 
   buttonText, 
@@ -83,7 +85,9 @@ const UpdateCard = ({
 };
 
 // Tweet component for the X Feeds section
-const Tweet = ({ 
+// Component defined for future use
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _Tweet = ({ 
   username, 
   handle, 
   content, 
@@ -151,7 +155,8 @@ function HappeningsPage() {
     }
   ];
 
-  // Sample data for updates
+  // Sample data for updates - will be used in the future
+  /* Commented out to fix ESLint error
   const updates = [
     {
       id: 1,
@@ -168,6 +173,7 @@ function HappeningsPage() {
       imageSrc: "https://images.pexels.com/photos/5380591/pexels-photo-5380591.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
     }
   ];
+  */
 
   // Sample data for tweets
   const tweets = [
@@ -366,7 +372,7 @@ function HappeningsPage() {
                             <div key={tweet.id} className="w-full">
                               <div className="inline-flex justify-start items-center gap-4 px-4 w-full">
                                 <div className="flex justify-center items-center">
-                                  <img className="w-16 h-16 rounded-[20px] border-2 border-red-500 object-cover" src={tweet.profilePic} alt={tweet.username} />
+                                  <Image className="w-16 h-16 rounded-[20px] border-2 border-red-500 object-cover" src={tweet.profilePic} alt={tweet.username} width={64} height={64} />
                                 </div>
                                 <div className="inline-flex flex-col justify-start items-start gap-2">
                                   <div className="justify-start">

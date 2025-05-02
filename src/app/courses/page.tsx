@@ -1,10 +1,8 @@
 "use client";
 
 import React from 'react';
-import Image from 'next/image';
 import { PageLayout } from '@/components/layout';
 import { CourseCard } from '@/components/courses';
-import { Button } from '@/components/ui/Button';
 import PageTransition from '@/components/animations/PageTransition';
 import AnimateOnScroll from '@/components/animations/AnimateOnScroll';
 import StaggeredAnimation from '@/components/animations/StaggeredAnimation';

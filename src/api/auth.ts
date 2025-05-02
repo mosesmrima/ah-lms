@@ -51,7 +51,7 @@ export const authApi = {
   async getCurrentUser(): Promise<User | null> {
     try {
       return await apiClient.get<User>('/auth/me');
-    } catch (error) {
+    } catch {
       // If there's an error (like 401), return null instead of throwing
       return null;
     }

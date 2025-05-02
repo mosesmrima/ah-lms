@@ -80,7 +80,7 @@ const ContinueLearningSection = () => {
     <section className="px-4 sm:px-6 md:px-12 py-10 bg-black">
       <div className="container mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl sm:text-2xl font-bold">Let's continue learning, Collins Kreation</h2>
+          <h2 className="text-xl sm:text-2xl font-bold">Let&apos;s continue learning, Collins Kreation</h2>
           <Link href="/courses" className="text-sm text-red-500 hover:text-red-400 font-medium">
             My Course
           </Link>

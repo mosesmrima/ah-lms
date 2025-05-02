@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { CourseCard } from "@/components/courses";
+import Link from "next/link";
 
 const FILTERS = [
   { label: "Web3", value: "web3" },
@@ -54,9 +55,9 @@ const PopularCoursesSection = () => {
           ))}
         </div>
         <div className="flex justify-center mt-8 sm:mt-10">
-          <a href="/courses">
+          <Link href="/courses">
             <Button customVariant="secondary" className="px-4 sm:px-6 py-2 text-sm sm:text-base">View All Courses</Button>
-          </a>
+          </Link>
         </div>
       </div>
     </section>

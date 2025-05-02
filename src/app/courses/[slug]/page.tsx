@@ -1,8 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { useParams } from "next/navigation";
 import { useState } from "react";
 import DashboardNavbar from "@/components/layout/DashboardNavbar";
 import Footer from "@/components/layout/Footer";
@@ -88,7 +86,8 @@ const courseData = {
 };
 
 export default function CourseDetails() {
-  const { slug } = useParams();
+  // We'll use the params in the future when fetching course data
+  // const { slug } = useParams();
   const [activeTab, setActiveTab] = useState("overview");
   
   // In a real app, you would fetch course data based on the slug
@@ -190,7 +189,7 @@ export default function CourseDetails() {
         {activeTab === 'overview' && (
           <div>
             <div className="bg-[#1A1A1A] rounded-lg p-6 mb-8">
-              <h2 className="text-xl font-semibold mb-4">What you'll learn</h2>
+              <h2 className="text-xl font-semibold mb-4">What you&apos;ll learn</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {course.whatYouWillLearn.map((item, index) => (
                   <div key={index} className="flex items-start">

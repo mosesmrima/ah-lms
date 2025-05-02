@@ -1,7 +1,6 @@
 "use client";
 
 import { PageLayout } from "@/components/layout";
-import DashboardNavbar from "@/components/layout/DashboardNavbar";
 import Image from "next/image";
 
 interface CourseCardProps {

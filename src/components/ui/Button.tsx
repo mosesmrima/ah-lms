@@ -61,7 +61,12 @@ const Button = React.forwardRef<HTMLButtonElement, CustomButtonProps>(
           widthStyle,
           className
         )} 
-        onPress={(e) => props.onClick?.(e as any)}
+        onPress={(e) => {
+          if (props.onClick) {
+            // Convert to unknown first to avoid type errors
+            props.onClick(e as unknown as React.MouseEvent<HTMLButtonElement>);
+          }
+        }}
         {...props}
       >
         {children}

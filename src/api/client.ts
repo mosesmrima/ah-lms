@@ -16,14 +16,14 @@ export const apiClient = {
   /**
    * Performs a POST request
    */
-  async post<T>(endpoint: string, data?: any, options = {}): Promise<T> {
+  async post<T>(endpoint: string, data?: Record<string, unknown>, options = {}): Promise<T> {
     return await request<T>('POST', endpoint, data, options);
   },
 
   /**
    * Performs a PUT request
    */
-  async put<T>(endpoint: string, data?: any, options = {}): Promise<T> {
+  async put<T>(endpoint: string, data?: Record<string, unknown>, options = {}): Promise<T> {
     return await request<T>('PUT', endpoint, data, options);
   },
 
@@ -41,16 +41,27 @@ export const apiClient = {
 async function request<T>(
   method: string,
   endpoint: string,
-  data?: any,
+  data?: Record<string, unknown>,
   options = {}
 ): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
   
-  const headers = {
-    'Content-Type': 'application/json',
-    ...getAuthHeader(),
-    ...(options as any).headers
+  // Initialize headers with content type
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json'
   };
+  
+  // Add auth headers
+  const authHeader = getAuthHeader();
+  if (authHeader.Authorization) {
+    headers.Authorization = authHeader.Authorization;
+  }
+  
+  // Add headers from options if they exist
+  const optionsHeaders = (options as { headers?: Record<string, string> }).headers;
+  if (optionsHeaders) {
+    Object.assign(headers, optionsHeaders);
+  }
 
   const config: RequestInit = {
     method,

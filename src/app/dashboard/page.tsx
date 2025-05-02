@@ -6,13 +6,11 @@ import { Button } from "@/components/ui/Button";
 import { PopularCoursesSection } from "@/components/home";
 import { UserHeroSection, ContinueLearningSection } from "@/components/dashboard";
 import { PulsingPlayButton } from "@/components/ui/PulsingPlayButton";
-import PageTransition from "@/components/animations/PageTransition";
-import AnimateOnScroll from "@/components/animations/AnimateOnScroll";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function Dashboard() {
-  // Mock data for user's courses
+  // Mock data for user's courses - will be used in the future
+  /* Commented out to fix ESLint error
   const userCourses = [
     {
       id: 1,
@@ -39,6 +37,7 @@ export default function Dashboard() {
       progress: 15,
     },
   ];
+  */
 
   // Mock data for recommended course
   const recommendedCourse = {
