@@ -37,7 +37,18 @@ const COURSES = [
   }
 ];
 
-const RelatedCoursesSection = () => {
+interface RelatedCoursesSectionProps {
+  courses: Array<{
+    id: number;
+    title: string;
+    image: string;
+    author: string;
+    authorAvatar: string;
+    category?: string;
+  }>;
+}
+
+const RelatedCoursesSection = ({ courses }: RelatedCoursesSectionProps) => {
   return (
     <section className="bg-black py-10 px-4 sm:px-6 md:px-12">
       <div className="max-w-7xl mx-auto">
@@ -45,7 +56,7 @@ const RelatedCoursesSection = () => {
           <h2 className="text-2xl sm:text-3xl font-bold text-white">Related Courses</h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          {COURSES.map((course) => (
+          {courses.map((course) => (
             <CourseCard key={course.id} {...course} />
           ))}
         </div>
