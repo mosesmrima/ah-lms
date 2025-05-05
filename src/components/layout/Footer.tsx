@@ -54,7 +54,14 @@ const Footer = () => {
         {/* Column 5: Contact Info */}
         <div className="flex flex-col items-start">
           <div className="mb-4 flex items-center">
-              <Image src="/images/IMG_0955-Photoroom%201.png" alt="Africa Tech" width={200} height={200} />
+            <Image
+              src="/images/IMG_0955-Photoroom%201.png"
+              alt="Africa Tech"
+              width={200}
+              height={200}
+              priority
+              style={{ width: 'auto', height: 'auto' }}
+            />
           </div>
           <div className="text-gray-400">
             <p>Location: Offices or box number</p>
@@ -66,7 +73,7 @@ const Footer = () => {
       {/* Bottom Section */}
       <div className="mt-8 pt-6 text-center">
         <p className="text-sm text-red-500">
-          All rights reserved to Africahackon Academy © 2023
+          All rights reserved to Africahackon Academy 2023
         </p>
       </div>
     </footer>

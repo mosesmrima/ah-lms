@@ -224,7 +224,7 @@ function SectionSummary({ sectionIndex, lectureIndex, curriculum }: SectionSumma
       <div className="mb-4">
         <div className="flex items-center mb-2">
           <svg className="w-4 h-4 mr-2 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" />
+            <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" />
           </svg>
           <span className="text-sm text-gray-300">{lecture.duration}</span>
         </div>
@@ -238,7 +238,7 @@ function SectionSummary({ sectionIndex, lectureIndex, curriculum }: SectionSumma
       </div>
       
       <div className="mb-4">
-        <h5 className="font-medium mb-2">What you'll learn</h5>
+        <h5 className="font-medium mb-2">What you&apos;ll learn</h5>
         <ul className="space-y-2">
           <li className="flex items-start">
             <svg className="w-4 h-4 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -434,7 +434,7 @@ export default function CourseDetails() {
                     {/* Play button */}
                     <div className="w-16 h-16 rounded-full bg-[#E7343A] flex items-center justify-center z-10 relative">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" />
                       </svg>
                     </div>
                     {/* Pulsating animation */}
@@ -449,7 +449,7 @@ export default function CourseDetails() {
   let icon;
   if (item.toLowerCase().includes('video')) {
     icon = (
-      <svg className="w-5 h-5 text-red-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor"/><polygon points="10,9 16,12 10,15" fill="currentColor"/></svg>
+      <svg className="w-5 h-5 text-red-400 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor"/><polygon points="10,9 16,12 10,15" fill="currentColor"/></svg>
     );
   } else if (item.toLowerCase().includes('resource')) {
     icon = (
@@ -480,7 +480,10 @@ export default function CourseDetails() {
   );
 })}
                 </ul>
-                <button className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded mt-6 transition-colors">
+                <button 
+                  onClick={() => window.location.href = `${window.location.pathname}/watch`}
+                  className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded mt-6 transition-colors"
+                >
                   Enroll
                 </button>
               </div>
@@ -529,7 +532,7 @@ export default function CourseDetails() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {course.whatYouWillLearn.map((item, index) => (
                   <div key={index} className="flex items-start">
-                    <svg className="w-5 h-5 text-green-500 mr-2 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg className="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
                     </svg>
                     <span>{item}</span>
@@ -589,10 +592,13 @@ export default function CourseDetails() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {sampleRatings.map((r, idx) => (
                 <div key={idx} className="flex bg-[#232323] rounded-xl p-4 items-start">
-                  <img
+                  <Image
                     src={r.avatar}
                     alt={`Avatar for ${r.name}`}
-                    className="w-16 h-16 rounded-xl object-cover mr-4 border-2 border-red-600"
+                    width={64}
+                    height={64}
+                    className="rounded-xl object-cover mr-4 border-2 border-red-600"
+                    priority
                   />
                   <div>
                     <div className="font-bold text-white mb-1">{r.name}</div>
