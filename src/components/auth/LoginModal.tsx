@@ -1,6 +1,6 @@
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Dialog, Transition } from '@headlessui/react';
+import { Modal, ModalContent, ModalHeader, ModalBody } from '@heroui/react';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
 interface LoginModalProps {
@@ -40,38 +40,39 @@ const LoginModal = ({ isOpen, onClose, onOpenSignUp }: LoginModalProps) => {
   };
 
   return (
-		<Transition appear show={isOpen} as={Fragment}>
-			<Dialog as="div" className="relative z-50" onClose={onClose}>
-				<Transition.Child
-					as={Fragment}
-					enter="ease-out duration-300"
-					enterFrom="opacity-0"
-					enterTo="opacity-100"
-					leave="ease-in duration-200"
-					leaveFrom="opacity-100"
-					leaveTo="opacity-0"
-				>
-					<div className="fixed inset-0 bg-black/70" />
-				</Transition.Child>
-
-				<div className="fixed inset-0 overflow-y-auto">
-					<div className="flex min-h-full items-center justify-center p-4">
-						<Transition.Child
-							as={Fragment}
-							enter="ease-out duration-300"
-							enterFrom="opacity-0 scale-95"
-							enterTo="opacity-100 scale-100"
-							leave="ease-in duration-200"
-							leaveFrom="opacity-100 scale-100"
-							leaveTo="opacity-0 scale-95"
-						>
-							<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-lg bg-black p-6 text-left align-middle shadow-xl transition-all">
-								<Dialog.Title
-									as="h3"
-									className="text-center text-2xl font-medium leading-6 text-white mb-6"
-								>
-									Login to Africahackon
-								</Dialog.Title>
+		<Modal 
+			isOpen={isOpen} 
+			onClose={onClose}
+			backdrop="blur"
+			placement="center"
+			classNames={{
+				base: "bg-black rounded-lg shadow-xl",
+				backdrop: "bg-black/70",
+				wrapper: "z-50 overflow-y-auto",
+			}}
+			motionProps={{
+				variants: {
+					enter: {
+						opacity: 1,
+						scale: 1,
+						transition: { duration: 0.3, ease: "easeOut" }
+					},
+					exit: {
+						opacity: 0,
+						scale: 0.95,
+						transition: { duration: 0.2, ease: "easeIn" }
+					}
+				}
+			}}
+			hideCloseButton
+		>
+			<ModalContent className="p-0 w-full max-w-md">
+				{() => (
+					<>
+						<ModalHeader className="text-center text-2xl font-medium leading-6 text-white mb-0 p-6 pb-0">
+							Login to Africahackon
+						</ModalHeader>
+						<ModalBody className="p-6 pt-3">
 
 								<form onSubmit={handleSubmit} className="space-y-4">
 									<div>
@@ -198,12 +199,11 @@ const LoginModal = ({ isOpen, onClose, onOpenSignUp }: LoginModalProps) => {
 										Sign Up
 									</button>
 								</div>
-							</Dialog.Panel>
-						</Transition.Child>
-					</div>
-				</div>
-			</Dialog>
-		</Transition>
+						</ModalBody>
+					</>
+				)}
+			</ModalContent>
+		</Modal>
 	);
 };
 
