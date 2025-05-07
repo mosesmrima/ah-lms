@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -11,6 +11,7 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@heroui/react": "2.8.0-beta.2",
+    "firebase": "^10.14.1",
     "framer-motion": "12.9.1",
     "next": "15.3.1",
     "next-themes": "^0.4.6",
