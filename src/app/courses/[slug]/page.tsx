@@ -206,6 +206,7 @@ interface SectionSummaryProps {
 }
 
 function SectionSummary({ sectionIndex, lectureIndex, curriculum }: SectionSummaryProps) {
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   if (sectionIndex === -1 || !curriculum[sectionIndex]) {
     return (
       <div className="bg-[#181818] border border-gray-700 rounded-xl p-6">
@@ -217,7 +218,6 @@ function SectionSummary({ sectionIndex, lectureIndex, curriculum }: SectionSumma
 
   const section = curriculum[sectionIndex];
   const lecture = section.lectures[lectureIndex] || section.lectures[0];
-  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   return (
     <div className="bg-[#181818] border border-gray-700 rounded-xl p-6">

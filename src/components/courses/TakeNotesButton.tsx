@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 import { PencilIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
-interface TakeNotesButtonProps {
-  courseId: string;
-  lessonId: string;
-}
-
-const TakeNotesButton: React.FC<TakeNotesButtonProps> = ({ courseId, lessonId }) => {
+const TakeNotesButton = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleNotes = () => {

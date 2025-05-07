@@ -89,10 +89,7 @@ export default function CourseWatchPage() {
             
             {/* Take Notes Button */}
             <div className="mb-4">
-              <TakeNotesButton 
-                courseId={mockLessonData.courseId}
-                lessonId={mockLessonData.id}
-              />
+              <TakeNotesButton />
             </div>
             
             {/* Horizontal Line */}
