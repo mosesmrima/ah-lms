@@ -218,138 +218,102 @@ async function enrollInCourse(userId: string, courseId: string) {
 ```
 
 ### React Query Examples
+
+Here are some examples of using React Query with our Firebase API:
+
 ```typescript
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { courseApi, enrollmentApi } from '@/lib/firebase';
-import { useAuthStore } from '@/lib/zustand';
-
-// Fetch all courses with React Query
-function CoursesList() {
-  const { data: courses, isLoading, error } = useQuery({
-    queryKey: ['courses'],
-    queryFn: () => courseApi.list()
-  });
-
+// Example 1: Fetching and managing courses
+function CourseList() {
+  const { courses, enrolledCourses, isLoading } = useCourses();
+  
   if (isLoading) return <div>Loading courses...</div>;
-  if (error) return <div>Error loading courses</div>;
-
+  
   return (
     <div>
+      <h2>All Courses</h2>
       {courses.map(course => (
-        <CourseCard key={course.id} course={course} />
+        <div key={course.id}>
+          <h3>{course.title}</h3>
+          <p>{course.description}</p>
+          {enrolledCourses?.some(ec => ec.id === course.id) && (
+            <span>Enrolled</span>
+          )}
+        </div>
       ))}
     </div>
   );
 }
 
-// Fetch enrolled courses for current user
-function EnrolledCourses() {
-  const { user } = useAuthStore();
-  const queryClient = useQueryClient();
-
-  const { data: enrollments, isLoading } = useQuery({
-    queryKey: ['enrollments', user?.id],
-    queryFn: () => enrollmentApi.getUserEnrollments(user!.id),
-    enabled: !!user // Only run query if user exists
-  });
-
-  // Mutation for enrolling in a course
-  const enrollMutation = useMutation({
-    mutationFn: (courseId: string) => enrollmentApi.create({
-      userId: user!.id,
+// Example 2: Managing user enrollments
+function EnrollmentManager() {
+  const { enrollments, userEnrollments, createEnrollment, deleteEnrollment } = useEnrollments();
+  
+  const handleEnroll = async (courseId: string) => {
+    await createEnrollment({
+      userId: user.id,
       courseId,
       status: 'active',
-      enrolledAt: new Date()
-    }),
-    onSuccess: () => {
-      // Invalidate and refetch enrollments
-      queryClient.invalidateQueries({ queryKey: ['enrollments', user?.id] });
-    }
-  });
-
-  if (isLoading) return <div>Loading enrollments...</div>;
-
+      enrolledAt: new Date(),
+      lastAccessedAt: new Date(),
+      progress: {
+        percentage: 0,
+        completedLessons: []
+      }
+    });
+  };
+  
   return (
     <div>
-      <h2>Your Enrolled Courses</h2>
-      {enrollments?.map(enrollment => (
-        <EnrolledCourseCard key={enrollment.id} enrollment={enrollment} />
+      <h2>My Enrollments</h2>
+      {userEnrollments?.map(enrollment => (
+        <div key={enrollment.id}>
+          <span>Course: {enrollment.courseId}</span>
+          <span>Progress: {enrollment.progress.percentage}%</span>
+          <button onClick={() => deleteEnrollment(enrollment.id)}>
+            Cancel Enrollment
+          </button>
+        </div>
       ))}
-      
-      {/* Example of enrolling in a new course */}
-      <button 
-        onClick={() => enrollMutation.mutate('course-id')}
-        disabled={enrollMutation.isPending}
-      >
-        {enrollMutation.isPending ? 'Enrolling...' : 'Enroll in Course'}
-      </button>
     </div>
   );
 }
 
-// Fetch course details with real-time updates
-function CourseDetails({ courseId }: { courseId: string }) {
-  const { data: course, isLoading } = useQuery({
-    queryKey: ['course', courseId],
-    queryFn: () => courseApi.get(courseId),
-    // Enable real-time updates
-    refetchInterval: 1000 // Refetch every second
-  });
-
-  if (isLoading) return <div>Loading course details...</div>;
-
+// Example 3: User authentication and profile management
+function UserProfile() {
+  const { user, login, logout, isLoading } = useAuth();
+  
+  const handleLogin = async (email: string, password: string) => {
+    await login({ email, password });
+  };
+  
+  if (isLoading) return <div>Loading profile...</div>;
+  
   return (
     <div>
-      <h1>{course?.title}</h1>
-      <p>{course?.description}</p>
-      {/* Course details */}
+      {user ? (
+        <>
+          <h2>Welcome, {user.name}</h2>
+          <p>Email: {user.email}</p>
+          <p>Role: {user.role}</p>
+          <button onClick={() => logout()}>Logout</button>
+        </>
+      ) : (
+        <LoginForm onSubmit={handleLogin} />
+      )}
     </div>
-  );
-}
-
-// Optimistic updates example
-function UpdateCourseStatus() {
-  const queryClient = useQueryClient();
-
-  const updateMutation = useMutation({
-    mutationFn: ({ courseId, status }: { courseId: string; status: string }) =>
-      courseApi.update(courseId, { status }),
-    onMutate: async ({ courseId, status }) => {
-      // Cancel any outgoing refetches
-      await queryClient.cancelQueries({ queryKey: ['course', courseId] });
-
-      // Snapshot the previous value
-      const previousCourse = queryClient.getQueryData(['course', courseId]);
-
-      // Optimistically update to the new value
-      queryClient.setQueryData(['course', courseId], (old: any) => ({
-        ...old,
-        status
-      }));
-
-      // Return context with the snapshotted value
-      return { previousCourse };
-    },
-    onError: (err, { courseId }, context) => {
-      // If the mutation fails, use the context returned from onMutate to roll back
-      queryClient.setQueryData(['course', courseId], context?.previousCourse);
-    },
-    onSettled: (data, error, { courseId }) => {
-      // Always refetch after error or success
-      queryClient.invalidateQueries({ queryKey: ['course', courseId] });
-    }
-  });
-
-  return (
-    <button
-      onClick={() => updateMutation.mutate({ courseId: '123', status: 'published' })}
-      disabled={updateMutation.isPending}
-    >
-      {updateMutation.isPending ? 'Updating...' : 'Publish Course'}
-    </button>
   );
 }
 ```
+
+Key features of our React Query implementation:
+
+1. **Type Safety**: All queries and mutations are fully typed with TypeScript
+2. **Automatic Caching**: React Query handles caching and revalidation
+3. **Optimistic Updates**: Mutations can be configured for optimistic updates
+4. **Error Handling**: Built-in error states and retry logic
+5. **Loading States**: Easy access to loading states for better UX
+6. **Store Integration**: Automatic synchronization with Zustand stores
+7. **Query Invalidation**: Automatic cache invalidation on mutations
 
 ## Project Architecture
 
