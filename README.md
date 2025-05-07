@@ -217,6 +217,140 @@ async function enrollInCourse(userId: string, courseId: string) {
 }
 ```
 
+### React Query Examples
+```typescript
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { courseApi, enrollmentApi } from '@/lib/firebase';
+import { useAuthStore } from '@/lib/zustand';
+
+// Fetch all courses with React Query
+function CoursesList() {
+  const { data: courses, isLoading, error } = useQuery({
+    queryKey: ['courses'],
+    queryFn: () => courseApi.list()
+  });
+
+  if (isLoading) return <div>Loading courses...</div>;
+  if (error) return <div>Error loading courses</div>;
+
+  return (
+    <div>
+      {courses.map(course => (
+        <CourseCard key={course.id} course={course} />
+      ))}
+    </div>
+  );
+}
+
+// Fetch enrolled courses for current user
+function EnrolledCourses() {
+  const { user } = useAuthStore();
+  const queryClient = useQueryClient();
+
+  const { data: enrollments, isLoading } = useQuery({
+    queryKey: ['enrollments', user?.id],
+    queryFn: () => enrollmentApi.getUserEnrollments(user!.id),
+    enabled: !!user // Only run query if user exists
+  });
+
+  // Mutation for enrolling in a course
+  const enrollMutation = useMutation({
+    mutationFn: (courseId: string) => enrollmentApi.create({
+      userId: user!.id,
+      courseId,
+      status: 'active',
+      enrolledAt: new Date()
+    }),
+    onSuccess: () => {
+      // Invalidate and refetch enrollments
+      queryClient.invalidateQueries({ queryKey: ['enrollments', user?.id] });
+    }
+  });
+
+  if (isLoading) return <div>Loading enrollments...</div>;
+
+  return (
+    <div>
+      <h2>Your Enrolled Courses</h2>
+      {enrollments?.map(enrollment => (
+        <EnrolledCourseCard key={enrollment.id} enrollment={enrollment} />
+      ))}
+      
+      {/* Example of enrolling in a new course */}
+      <button 
+        onClick={() => enrollMutation.mutate('course-id')}
+        disabled={enrollMutation.isPending}
+      >
+        {enrollMutation.isPending ? 'Enrolling...' : 'Enroll in Course'}
+      </button>
+    </div>
+  );
+}
+
+// Fetch course details with real-time updates
+function CourseDetails({ courseId }: { courseId: string }) {
+  const { data: course, isLoading } = useQuery({
+    queryKey: ['course', courseId],
+    queryFn: () => courseApi.get(courseId),
+    // Enable real-time updates
+    refetchInterval: 1000 // Refetch every second
+  });
+
+  if (isLoading) return <div>Loading course details...</div>;
+
+  return (
+    <div>
+      <h1>{course?.title}</h1>
+      <p>{course?.description}</p>
+      {/* Course details */}
+    </div>
+  );
+}
+
+// Optimistic updates example
+function UpdateCourseStatus() {
+  const queryClient = useQueryClient();
+
+  const updateMutation = useMutation({
+    mutationFn: ({ courseId, status }: { courseId: string; status: string }) =>
+      courseApi.update(courseId, { status }),
+    onMutate: async ({ courseId, status }) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ['course', courseId] });
+
+      // Snapshot the previous value
+      const previousCourse = queryClient.getQueryData(['course', courseId]);
+
+      // Optimistically update to the new value
+      queryClient.setQueryData(['course', courseId], (old: any) => ({
+        ...old,
+        status
+      }));
+
+      // Return context with the snapshotted value
+      return { previousCourse };
+    },
+    onError: (err, { courseId }, context) => {
+      // If the mutation fails, use the context returned from onMutate to roll back
+      queryClient.setQueryData(['course', courseId], context?.previousCourse);
+    },
+    onSettled: (data, error, { courseId }) => {
+      // Always refetch after error or success
+      queryClient.invalidateQueries({ queryKey: ['course', courseId] });
+    }
+  });
+
+  return (
+    <button
+      onClick={() => updateMutation.mutate({ courseId: '123', status: 'published' })}
+      disabled={updateMutation.isPending}
+    >
+      {updateMutation.isPending ? 'Updating...' : 'Publish Course'}
+    </button>
+  );
+}
+```
+
 ## Project Architecture
 
 ### Tech Stack
