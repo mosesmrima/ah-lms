@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PencilIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 interface TakeNotesButtonProps {
   courseId: string;
@@ -8,53 +8,52 @@ interface TakeNotesButtonProps {
 
 const TakeNotesButton: React.FC<TakeNotesButtonProps> = ({ courseId, lessonId }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [note, setNote] = useState('');
 
-  const handleSaveNote = () => {
-    // Here you would implement the logic to save the note
-    // For example, sending it to an API
-    console.log('Saving note for course:', courseId, 'lesson:', lessonId, 'content:', note);
-    setIsOpen(false);
+  const toggleNotes = () => {
+    setIsOpen(!isOpen);
   };
 
   return (
-    <>
+    <div className="w-full">
       <button
-        onClick={() => setIsOpen(true)}
-        className="flex items-center bg-[#E7343A] hover:bg-[#d12e33] text-white px-3 py-2 rounded-md transition duration-300"
+        onClick={toggleNotes}
+        className={`flex items-center ${isOpen ? 'text-[#E7343A] hover:text-[#d12e33]' : 'bg-[#E7343A] hover:bg-[#d12e33] text-white'} px-3 py-2 rounded-md transition duration-300`}
       >
-        <PencilIcon className="h-5 w-5 mr-2" />
-        Take Notes
+        {isOpen ? (
+          <>
+            <XMarkIcon className="h-5 w-5 mr-2" />
+            Hide Notes
+          </>
+        ) : (
+          <>
+            <PencilIcon className="h-5 w-5 mr-2" />
+            Take Notes
+          </>
+        )}
       </button>
-
+      
       {isOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-[#1A1A1A] rounded-lg w-full max-w-2xl p-6">
-            <h3 className="text-xl font-bold mb-4 text-white">Take Notes</h3>
-            <textarea
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              className="w-full h-64 bg-[#111] text-white rounded-lg p-4 mb-4 focus:outline-none focus:ring-2 focus:ring-[#E7343A]"
-              placeholder="Write your notes here..."
-            />
-            <div className="flex justify-end space-x-3">
-              <button
-                onClick={() => setIsOpen(false)}
-                className="px-4 py-2 bg-[#333] text-white rounded-md hover:bg-[#444] transition duration-300"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSaveNote}
-                className="px-4 py-2 bg-[#E7343A] text-white rounded-md hover:bg-[#d12e33] transition duration-300"
-              >
-                Save Notes
-              </button>
+        <div className="mt-4 bg-black rounded-lg border border-gray-800 overflow-hidden">
+          <div className="p-4">
+            <div className="mb-4">
+              <input 
+                type="text" 
+                className="w-full bg-[#111] text-white border border-gray-700 rounded-md p-2 mb-4 focus:outline-none focus:ring-1 focus:ring-[#E7343A] text-sm" 
+                defaultValue="Edit your notes at 04:35"
+              />
+              
+              <div className="bg-[#111] rounded-lg p-4 border border-gray-700">
+                <div className="text-[#E7343A] font-bold mb-1">02:22</div>
+                <div className="text-white font-medium mb-1">Introduction to design for startups - Lesson 5: Creation an art-board.</div>
+                <p className="text-gray-400 text-sm">
+                  As well as designers I also had in mind all the people who project manage, own or develop digital products. I believe there is a lot of interesting materials that will help the whole business think differently about creating digital products.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

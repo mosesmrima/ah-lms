@@ -80,6 +80,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         ></div>
       </div>
       
+      {/* Red Progress Line */}
+      <div className="h-1 bg-[#E7343A]"></div>
+      
       {/* Video Controls */}
       <div className="bg-[#1A1A1A] p-2 flex items-center justify-between">
         <div className="flex items-center space-x-2">

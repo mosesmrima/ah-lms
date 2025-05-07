@@ -23,11 +23,11 @@ const LessonsList: React.FC<LessonsListProps> = ({
     <div className="bg-[#1A1A1A] rounded-lg p-4">
       <h3 className="text-xl font-bold mb-4 text-white">{courseTitle}</h3>
       
-      <div className="space-y-2">
+      <div className="space-y-0 border-t border-gray-700">
         {lessons.map((lesson) => (
           <div 
             key={lesson.id} 
-            className={`flex items-center p-2 rounded cursor-pointer transition duration-300 ${
+            className={`flex items-center p-3 border-b border-gray-700 cursor-pointer transition duration-300 ${
               lesson.status === 'current' 
                 ? 'bg-[#E7343A] bg-opacity-20' 
                 : 'hover:bg-[#222]'

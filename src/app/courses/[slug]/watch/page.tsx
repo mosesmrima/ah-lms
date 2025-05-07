@@ -65,12 +65,14 @@ export default function CourseWatchPage() {
       <DashboardNavbar user={{ name: "John Doe" }} />
       <div className="mb-8"></div>
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left Column - Video Player and Notes */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-8 relative">
+            {/* Vertical Line on the Right */}
+            <div className="hidden lg:block absolute top-0 right-0 bottom-0 w-px bg-[#828282] -mr-4"></div>
             {/* Back Button */}
             <div className="mb-4">
-              <Link href={`/courses/${mockLessonData.courseId}`} className="flex items-center text-white hover:text-gray-300">
+              <Link href={`/courses/${mockLessonData.courseId}`} className="flex items-center text-[#828282] hover:text-gray-300">
                 <ChevronLeftIcon className="h-5 w-5 mr-1" />
                 <span>{mockLessonData.courseTitle}</span>
               </Link>
@@ -86,21 +88,22 @@ export default function CourseWatchPage() {
             </div>
             
             {/* Take Notes Button */}
-            <div className="mb-8">
+            <div className="mb-4">
               <TakeNotesButton 
                 courseId={mockLessonData.courseId}
                 lessonId={mockLessonData.id}
               />
             </div>
             
+            {/* Horizontal Line */}
+            <div className="border-b border-[#828282] mb-8"></div>
+            
             {/* Lesson Summary */}
             <div className="mb-8">
               <h2 className="text-2xl font-bold mb-4">{mockLessonData.title}</h2>
-              <div className="bg-gray-900 rounded-lg p-6">
-                <p className="text-gray-300 mb-4">
-                  {mockLessonData.description}
-                </p>
-              </div>
+              <p className="text-gray-400">
+                {mockLessonData.description}
+              </p>
             </div>
             
             {/* Attached Files */}
@@ -108,7 +111,7 @@ export default function CourseWatchPage() {
           </div>
           
           {/* Right Column - Lessons List and Students */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-4">
             {/* Lessons List */}
             <div className="mb-8">
               <LessonsList

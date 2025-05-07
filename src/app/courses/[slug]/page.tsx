@@ -5,6 +5,8 @@ import { useState } from "react";
 import DashboardNavbar from "@/components/layout/DashboardNavbar";
 import Footer from "@/components/layout/Footer";
 import RelatedCoursesSection from "@/components/courses/RelatedCoursesSection";
+import { Dialog } from '@headlessui/react';
+import VideoPlayer from '@/components/courses/VideoPlayer';
 
 // Mock data for the Data Security course
 const courseData = {
@@ -215,7 +217,8 @@ function SectionSummary({ sectionIndex, lectureIndex, curriculum }: SectionSumma
 
   const section = curriculum[sectionIndex];
   const lecture = section.lectures[lectureIndex] || section.lectures[0];
-  
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
   return (
     <div className="bg-[#181818] border border-gray-700 rounded-xl p-6">
       <h3 className="text-xl font-semibold mb-4">{section.title}</h3>
@@ -256,12 +259,26 @@ function SectionSummary({ sectionIndex, lectureIndex, curriculum }: SectionSumma
       </div>
       
       {lecture.preview && (
-        <button className="flex items-center justify-center w-full bg-[#E7343A] hover:bg-red-700 text-white py-2 rounded transition-colors">
+        <button onClick={() => setIsPreviewOpen(true)} className="flex items-center justify-center w-full bg-[#E7343A] hover:bg-red-700 text-white py-2 rounded transition-colors">
           <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
             <polygon points="7,5 15,10 7,15" />
           </svg>
           Watch Preview
         </button>
+      )}
+      {isPreviewOpen && (
+        <Dialog open={isPreviewOpen} onClose={() => setIsPreviewOpen(false)} className="fixed z-50 inset-0 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen">
+            <div aria-hidden="true" className="fixed inset-0 bg-black opacity-60" />
+            <div className="relative z-10 bg-black rounded-lg overflow-hidden w-full max-w-3xl">
+              <VideoPlayer
+                videoUrl="https://player.vimeo.com/external/368320203.hd.mp4?s=ed0d9c488b69517bfb0e3992c94eb0cacb6a34a8&profile_id=175&oauth2_token_id=57447761"
+                thumbnailUrl="https://images.pexels.com/photos/7988079/pexels-photo-7988079.jpeg"
+                duration="00:30"
+              />
+            </div>
+          </div>
+        </Dialog>
       )}
     </div>
   );
