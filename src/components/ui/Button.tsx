@@ -1,19 +1,19 @@
 "use client";
 
 import React from "react";
-import { Button as HeroButton, ButtonProps } from "@heroui/react";
+import { Button as HeroButton, ButtonProps, PressEvent } from "@heroui/react";
 import { cn } from "@/lib/utils";
 
 // Omit the conflicting props from HeroUI's ButtonProps
-interface CustomButtonProps extends Omit<ButtonProps, 'variant' | 'size' | 'onClick'> {
-  onClick?: (event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>) => void;
+interface CustomButtonProps extends Omit<ButtonProps, 'variant' | 'size' | 'onPress'> {
+  onPress?: (e: PressEvent) => void;
   customVariant?: "primary" | "secondary" | "outline" | "filter" | "card" | "happenings" | "newsletter";
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   fullWidth?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, CustomButtonProps>(
-  ({ className, customVariant = "primary", size = "md", fullWidth = false, children, ...props }, ref) => {
+  ({ className, customVariant = "primary", size = "md", fullWidth = false, children, onPress, ...props }, ref) => {
     // Base styles that apply to all buttons
     const baseStyle = "flex rounded-[12px] text-center font-bold leading-5 tracking-[0.25px]";
     
@@ -61,12 +61,7 @@ const Button = React.forwardRef<HTMLButtonElement, CustomButtonProps>(
           widthStyle,
           className
         )} 
-        onPress={(e) => {
-          if (props.onClick) {
-            // Convert to unknown first to avoid type errors
-            props.onClick(e as unknown as React.MouseEvent<HTMLButtonElement>);
-          }
-        }}
+        onPress={onPress}
         {...props}
       >
         {children}
