@@ -20,7 +20,7 @@ const SignUpModal = ({ isOpen, onClose, onOpenLogin }: SignUpModalProps) => {
     e.preventDefault();
     
     try {
-      await signUp({ email, password, fullName });
+      await signUp(email, password, fullName);
       addToast({
         title: "Success",
         description: "Account created successfully!",

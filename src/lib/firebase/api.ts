@@ -10,15 +10,17 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
-  serverTimestamp
+  serverTimestamp,
+  setDoc
 } from 'firebase/firestore';
 import { db } from './config';
-import type { User, Course, Enrollment } from '@/types';
+import type { User, Course, Enrollment, Event } from '@/types';
 
 const COLLECTIONS = {
   users: 'users',
   courses: 'courses',
-  enrollments: 'enrollments'
+  enrollments: 'enrollments',
+  events: 'events'
 } as const;
 
 // User API
@@ -30,32 +32,28 @@ export const userApi = {
     return { id: docSnap.id, ...docSnap.data() } as User;
   },
 
-  async getByEmail(email: string): Promise<User> {
+  async getByEmail(email: string): Promise<User | null> {
     const q = query(
       collection(db, COLLECTIONS.users),
-      where('email', '==', email)
+      where('email', '==', email),
+      limit(1)
     );
     const querySnapshot = await getDocs(q);
-    if (querySnapshot.empty) throw new Error('User not found');
+    if (querySnapshot.empty) return null;
     const doc = querySnapshot.docs[0];
     return { id: doc.id, ...doc.data() } as User;
   },
 
   async create(data: Omit<User, 'id'>): Promise<User> {
-    const docRef = await addDoc(collection(db, COLLECTIONS.users), {
-      ...data,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
-    });
-    return { id: docRef.id, ...data };
+    const docRef = doc(collection(db, COLLECTIONS.users));
+    const newUser = { ...data, id: docRef.id };
+    await setDoc(docRef, newUser);
+    return newUser;
   },
 
   async update(id: string, data: Partial<User>): Promise<void> {
     const docRef = doc(db, COLLECTIONS.users, id);
-    await updateDoc(docRef, {
-      ...data,
-      updatedAt: serverTimestamp()
-    });
+    await updateDoc(docRef, data);
   },
 
   async delete(id: string): Promise<void> {
@@ -103,20 +101,15 @@ export const courseApi = {
   },
 
   async create(data: Omit<Course, 'id'>): Promise<Course> {
-    const docRef = await addDoc(collection(db, COLLECTIONS.courses), {
-      ...data,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
-    });
-    return { id: docRef.id, ...data };
+    const docRef = doc(collection(db, COLLECTIONS.courses));
+    const newCourse = { ...data, id: docRef.id };
+    await setDoc(docRef, newCourse);
+    return newCourse;
   },
 
   async update(id: string, data: Partial<Course>): Promise<void> {
     const docRef = doc(db, COLLECTIONS.courses, id);
-    await updateDoc(docRef, {
-      ...data,
-      updatedAt: serverTimestamp()
-    });
+    await updateDoc(docRef, data);
   },
 
   async delete(id: string): Promise<void> {
@@ -176,4 +169,45 @@ export const enrollmentApi = {
     const docRef = doc(db, COLLECTIONS.enrollments, id);
     await deleteDoc(docRef);
   }
+};
+
+// Event API
+export const eventApi = {
+  async getAll(): Promise<Event[]> {
+    const q = query(collection(db, COLLECTIONS.events), orderBy('date', 'desc'));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Event));
+  },
+
+  async getById(id: string): Promise<Event | null> {
+    const docRef = doc(db, COLLECTIONS.events, id);
+    const docSnap = await getDoc(docRef);
+    if (!docSnap.exists()) return null;
+    return { id: docSnap.id, ...docSnap.data() } as Event;
+  },
+
+  async create(event: Omit<Event, 'id'>): Promise<Event> {
+    const docRef = doc(collection(db, COLLECTIONS.events));
+    const newEvent = { ...event, id: docRef.id };
+    await setDoc(docRef, newEvent);
+    return newEvent;
+  },
+
+  async update(id: string, data: Partial<Event>): Promise<void> {
+    const docRef = doc(db, COLLECTIONS.events, id);
+    await updateDoc(docRef, data);
+  },
+
+  async delete(id: string): Promise<void> {
+    const docRef = doc(db, COLLECTIONS.events, id);
+    await deleteDoc(docRef);
+  }
+};
+
+// Combined API export
+export const api = {
+  users: userApi,
+  courses: courseApi,
+  enrollments: enrollmentApi,
+  events: eventApi,
 }; 

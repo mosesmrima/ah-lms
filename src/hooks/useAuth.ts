@@ -1,102 +1,110 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState, useEffect } from 'react';
 import { useUserStore } from '@/store';
-import { userApi } from '@/lib/firebase/api';
-import { signInWithEmailAndPassword, signInWithGoogle, createUserWithEmailAndPassword } from '@/lib/firebase/utils';
 import { auth } from '@/lib/firebase/config';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
-import type { User } from '@/types';
-import React from 'react';
+import { api } from '@/lib/firebase/api';
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signOut,
+  onAuthStateChanged,
+  User as FirebaseUser,
+  updateProfile,
+} from 'firebase/auth';
+import { useQueryClient } from '@tanstack/react-query';
 
 export function useAuth() {
-  const { user, setUser, logout } = useUserStore();
+  const { setUser, logout: storeLogout } = useUserStore();
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isSigningUp, setIsSigningUp] = useState(false);
+  const [isGoogleSigningIn, setIsGoogleSigningIn] = useState(false);
   const queryClient = useQueryClient();
 
-  // Listen to auth state changes
-  React.useEffect(() => {
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        // Fetch user data from Firestore
-        const userData = await userApi.getByEmail(firebaseUser.email!);
-        setUser(userData);
+        try {
+          // Force a reload to get the latest user data
+          await firebaseUser.reload();
+          const user = await api.users.getByEmail(firebaseUser.email!);
+          console.log("userr:" ,user)
+          console.log("firebase user",firebaseUser)
+          if (!user) {
+            // Create user if they don't exist
+            const newUser = await api.users.create({
+              email: firebaseUser.email!,
+              name: firebaseUser.displayName || '',
+              role: 'student',
+              avatar: firebaseUser.photoURL || ''
+            });
+            setUser(newUser);
+          } else {
+            setUser(user);
+          }
+        } catch (error) {
+          console.error('Error in auth state change:', error);
+          storeLogout();
+        }
       } else {
-        logout();
+        storeLogout();
       }
     });
 
     return () => unsubscribe();
-  }, [setUser, logout]);
+  }, [setUser, storeLogout]);
 
-  // Query to fetch current user data
-  const { data: userData, isLoading } = useQuery<User>({
-    queryKey: ['user', user?.id],
-    queryFn: () => userApi.get(user!.id),
-    enabled: !!user?.id
-  });
-
-  // Update user in store when data changes
-  React.useEffect(() => {
-    if (userData) {
-      setUser(userData);
+  const login = async (email: string, password: string) => {
+    try {
+      setIsLoggingIn(true);
+      await signInWithEmailAndPassword(auth, email, password);
+    } finally {
+      setIsLoggingIn(false);
     }
-  }, [userData, setUser]);
+  };
 
-  // Login mutation
-  const loginMutation = useMutation<User, Error, { email: string; password: string }>({
-    mutationFn: async ({ email, password }) => {
-      await signInWithEmailAndPassword(email, password);
-      return userApi.getByEmail(email);
-    },
-    onSuccess: (data) => {
-      setUser(data);
-      queryClient.invalidateQueries({ queryKey: ['user', data.id] });
+  const signUp = async (email: string, password: string, fullName: string) => {
+    try {
+      setIsSigningUp(true);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      // Update the user's display name
+      await updateProfile(userCredential.user, {
+        displayName: fullName
+      });
+      // Force a reload of the user to get the updated profile
+      await userCredential.user.reload();
+    } finally {
+      setIsSigningUp(false);
     }
-  });
+  };
 
-  // Google Sign In mutation
-  const googleSignInMutation = useMutation<User, Error>({
-    mutationFn: async () => {
-      const result = await signInWithGoogle();
-      return userApi.getByEmail(result.user.email!);
-    },
-    onSuccess: (data) => {
-      setUser(data);
-      queryClient.invalidateQueries({ queryKey: ['user', data.id] });
+  const signInWithGoogle = async () => {
+    try {
+      setIsGoogleSigningIn(true);
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+    } finally {
+      setIsGoogleSigningIn(false);
     }
-  });
+  };
 
-  // Sign Up mutation
-  const signUpMutation = useMutation<User, Error, { email: string; password: string; fullName: string }>({
-    mutationFn: async ({ email, password, fullName }) => {
-      await createUserWithEmailAndPassword(email, password, fullName);
-      return userApi.getByEmail(email);
-    },
-    onSuccess: (data) => {
-      setUser(data);
-      queryClient.invalidateQueries({ queryKey: ['user', data.id] });
-    }
-  });
-
-  // Logout mutation
-  const logoutMutation = useMutation<void, Error>({
-    mutationFn: async () => {
+  const logout = async () => {
+    try {
       await signOut(auth);
-    },
-    onSuccess: () => {
-      logout();
-      queryClient.clear(); // Clear all queries from cache
+      storeLogout();
+      queryClient.clear();
+    } catch (error) {
+      console.error('Error signing out:', error);
     }
-  });
+  };
 
   return {
-    user: userData || user,
-    isLoading,
-    login: loginMutation.mutate,
-    signUp: signUpMutation.mutate,
-    signInWithGoogle: googleSignInMutation.mutate,
-    logout: logoutMutation.mutate,
-    isLoggingIn: loginMutation.isPending,
-    isSigningUp: signUpMutation.isPending,
-    isGoogleSigningIn: googleSignInMutation.isPending,
-    isLoggingOut: logoutMutation.isPending
+    login,
+    signUp,
+    signInWithGoogle,
+    logout,
+    isLoggingIn,
+    isSigningUp,
+    isGoogleSigningIn,
   };
 } 

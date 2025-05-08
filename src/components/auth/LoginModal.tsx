@@ -21,7 +21,7 @@ const LoginModal = ({ isOpen, onClose, onOpenSignUp }: LoginModalProps) => {
     e.preventDefault();
     
     try {
-      await login({ email, password });
+      await login(email, password);
       addToast({
         title: "Success",
         description: "Successfully logged in!",

@@ -4,7 +4,7 @@ import { createUserSlice, UserSlice } from './slices/userSlice';
 import { createCourseSlice, CourseSlice } from './slices/courseSlice';
 import { createEventSlice, EventSlice } from './slices/eventSlice';
 import { createUISlice, UISlice } from './slices/uiSlice';
-import type { User } from '@/types';
+
 
 // Combine all slices
 export type StoreState = UserSlice & CourseSlice & EventSlice & UISlice;
