@@ -17,7 +17,7 @@ const store = create<StoreState>()(
         ...createUserSlice(...a),
         ...createCourseSlice(...a),
         ...createEventSlice(...a),
-        ...createUISlice(...a),
+        ...createUISlice(a[0]),
       }),
       {
         name: 'app-storage',

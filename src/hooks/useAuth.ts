@@ -9,7 +9,6 @@ import {
   GoogleAuthProvider,
   signOut,
   onAuthStateChanged,
-  User as FirebaseUser,
   updateProfile,
 } from 'firebase/auth';
 import { useQueryClient } from '@tanstack/react-query';

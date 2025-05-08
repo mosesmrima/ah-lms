@@ -7,17 +7,18 @@ import {
   where,
   orderBy,
   limit,
-  startAfter,
-  DocumentSnapshot,
+  DocumentData,
   QueryConstraint,
-  Query,
-  CollectionReference
+  addDoc,
+  deleteDoc,
+  updateDoc
 } from 'firebase/firestore';
 import { 
   signInWithEmailAndPassword as firebaseSignIn,
   createUserWithEmailAndPassword as firebaseCreateUser,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
+  updateProfile
 } from 'firebase/auth';
 import { db, auth } from './config';
 import type { Course, Enrollment, User, Event } from '@/types';
@@ -30,7 +31,7 @@ export const signInWithEmailAndPassword = async (email: string, password: string
 
 export const createUserWithEmailAndPassword = async (email: string, password: string, fullName: string) => {
   const result = await firebaseCreateUser(auth, email, password);
-  // You might want to update the user's display name here
+  await updateProfile(result.user, { displayName: fullName });
   return result;
 };
 
@@ -40,49 +41,23 @@ export const signInWithGoogle = async () => {
 };
 
 // Generic function to get a document by ID
-export const getDocument = async <T>(
+export const getDocument = async <T extends DocumentData>(
   collectionName: string,
   id: string
-): Promise<T | null> => {
-  try {
-    const docRef = doc(db, collectionName, id);
-    const docSnap = await getDoc(docRef);
-    
-    if (docSnap.exists()) {
-      return { id: docSnap.id, ...docSnap.data() } as T;
-    }
-    return null;
-  } catch (error) {
-    console.error(`Error fetching ${collectionName} document:`, error);
-    throw error;
-  }
+): Promise<(T & { id: string }) | null> => {
+  const docRef = doc(db, collectionName, id);
+  const docSnap = await getDoc(docRef);
+  return docSnap.exists() ? { id: docSnap.id, ...docSnap.data() } as T & { id: string } : null;
 };
 
 // Generic function to get documents with pagination
-export const getDocuments = async <T>(
+export const getDocuments = async <T extends DocumentData>(
   collectionName: string,
   constraints: QueryConstraint[] = []
-): Promise<{ items: T[]; lastDoc: DocumentSnapshot | null }> => {
-  try {
-    let q: Query = collection(db, collectionName);
-    
-    if (constraints.length > 0) {
-      q = query(q, ...constraints);
-    }
-    
-    const querySnapshot = await getDocs(q);
-    const lastDoc = querySnapshot.docs[querySnapshot.docs.length - 1] || null;
-    
-    const items = querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    })) as T[];
-    
-    return { items, lastDoc };
-  } catch (error) {
-    console.error(`Error fetching ${collectionName} documents:`, error);
-    throw error;
-  }
+): Promise<(T & { id: string })[]> => {
+  const q = query(collection(db, collectionName), ...constraints);
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as T & { id: string });
 };
 
 // Course-specific functions
@@ -92,7 +67,7 @@ export const getCourse = async (id: string): Promise<Course | null> => {
 
 export const getCourses = async (
   params: PaginationParams = {}
-): Promise<{ items: Course[]; lastDoc: DocumentSnapshot | null }> => {
+): Promise<Course[]> => {
   const constraints: QueryConstraint[] = [];
   
   if (params.sortBy) {
@@ -119,8 +94,7 @@ export const getUserEnrollments = async (
     constraints.push(where('status', '==', status));
   }
   
-  const { items } = await getDocuments<Enrollment>('enrollments', constraints);
-  return items;
+  return getDocuments<Enrollment>('enrollments', constraints);
 };
 
 // User-specific functions
@@ -135,7 +109,7 @@ export const getEvent = async (id: string): Promise<Event | null> => {
 
 export const getEvents = async (
   params: PaginationParams = {}
-): Promise<{ items: Event[]; lastDoc: DocumentSnapshot | null }> => {
+): Promise<Event[]> => {
   const constraints: QueryConstraint[] = [];
   
   if (params.sortBy) {
@@ -147,4 +121,29 @@ export const getEvents = async (
   }
   
   return getDocuments<Event>('events', constraints);
+};
+
+export const createDocument = async <T extends DocumentData>(
+  collectionName: string,
+  data: T
+): Promise<T & { id: string }> => {
+  const docRef = await addDoc(collection(db, collectionName), data);
+  return { id: docRef.id, ...data };
+};
+
+export const updateDocument = async <T extends DocumentData>(
+  collectionName: string,
+  id: string,
+  data: Partial<T>
+): Promise<void> => {
+  const docRef = doc(db, collectionName, id);
+  await updateDoc(docRef, data as DocumentData);
+};
+
+export const deleteDocument = async (
+  collectionName: string,
+  id: string
+): Promise<void> => {
+  const docRef = doc(db, collectionName, id);
+  await deleteDoc(docRef);
 }; 

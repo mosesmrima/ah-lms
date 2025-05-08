@@ -29,10 +29,10 @@ const LoginModal = ({ isOpen, onClose, onOpenSignUp }: LoginModalProps) => {
       });
       router.push('/dashboard');
       onClose();
-    } catch (error: any) {
+    } catch (error: unknown) {
       addToast({
         title: "Error",
-        description: error.message || 'Failed to login',
+        description: error instanceof Error ? error.message : 'Failed to sign in',
         color: "danger"
       });
     }
@@ -48,10 +48,10 @@ const LoginModal = ({ isOpen, onClose, onOpenSignUp }: LoginModalProps) => {
       });
       router.push('/dashboard');
       onClose();
-    } catch (error: any) {
+    } catch (error: unknown) {
       addToast({
         title: "Error",
-        description: error.message || 'Failed to login with Google',
+        description: error instanceof Error ? error.message : 'Failed to sign in with Google',
         color: "danger"
       });
     }

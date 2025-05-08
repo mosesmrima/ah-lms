@@ -1,6 +1,4 @@
 import { z } from 'zod';
-import { UserRole } from './user';
-import { CourseLevel } from './course';
 
 // Enrollment status enum
 export const EnrollmentStatus = {

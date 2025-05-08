@@ -1,45 +1,62 @@
-import { orderBy, limit, where } from 'firebase/firestore';
-import { createDocument, updateDocument, deleteDocument, useDocumentData, useCollectionData } from './base';
-import type { Event } from '@/types';
-import type { PaginationParams } from '@/types';
-
-const COLLECTION_NAME = 'events';
+import { collection, doc, addDoc, updateDoc, deleteDoc, where, orderBy, limit } from 'firebase/firestore';
+import { db } from './config';
+import { Event } from '@/types';
+import { getDocument, getDocuments } from './utils';
 
 export const eventApi = {
-  create: (data: Omit<Event, 'id'>) => createDocument<Event>(COLLECTION_NAME, data),
-  
-  update: (id: string, data: Partial<Event>) => 
-    updateDocument<Event>(COLLECTION_NAME, id, data),
-  
-  delete: (id: string) => deleteDocument(COLLECTION_NAME, id),
-  
-  get: (id: string) => useDocumentData<Event>(COLLECTION_NAME, id),
-  
-  list: (params: PaginationParams = {}) => {
+  async get(id: string): Promise<Event | null> {
+    return getDocument<Event>('events', id);
+  },
+
+  async list(params: { sortBy?: string; sortOrder?: 'asc' | 'desc'; pageSize?: number } = {}): Promise<Event[]> {
     const constraints = [];
+    
     if (params.sortBy) {
       constraints.push(orderBy(params.sortBy, params.sortOrder || 'desc'));
     }
+    
     if (params.pageSize) {
       constraints.push(limit(params.pageSize));
     }
-    return useCollectionData<Event>(COLLECTION_NAME, constraints);
+    
+    return getDocuments<Event>('events', constraints);
   },
-  
-  getUpcoming: () => {
+
+  async getUpcoming(): Promise<Event[]> {
     const now = new Date();
-    const constraints = [where('startDate', '>', now)];
-    return useCollectionData<Event>(COLLECTION_NAME, constraints);
+    const constraints = [
+      where('startDate', '>=', now),
+      orderBy('startDate', 'asc')
+    ];
+    return getDocuments<Event>('events', constraints);
   },
-  
-  getPast: () => {
+
+  async getPast(): Promise<Event[]> {
     const now = new Date();
-    const constraints = [where('endDate', '<', now)];
-    return useCollectionData<Event>(COLLECTION_NAME, constraints);
+    const constraints = [
+      where('startDate', '<', now),
+      orderBy('startDate', 'desc')
+    ];
+    return getDocuments<Event>('events', constraints);
   },
-  
-  getByType: (type: Event['type']) => {
+
+  async getByType(type: string): Promise<Event[]> {
     const constraints = [where('type', '==', type)];
-    return useCollectionData<Event>(COLLECTION_NAME, constraints);
+    return getDocuments<Event>('events', constraints);
   },
+
+  async create(data: Omit<Event, 'id'>): Promise<Event> {
+    const docRef = await addDoc(collection(db, 'events'), data);
+    return { id: docRef.id, ...data };
+  },
+
+  async update(id: string, data: Partial<Event>): Promise<void> {
+    const docRef = doc(db, 'events', id);
+    await updateDoc(docRef, data);
+  },
+
+  async delete(id: string): Promise<void> {
+    const docRef = doc(db, 'events', id);
+    await deleteDoc(docRef);
+  }
 }; 

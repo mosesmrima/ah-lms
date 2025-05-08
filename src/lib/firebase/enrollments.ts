@@ -1,43 +1,54 @@
-import { orderBy, limit, where } from 'firebase/firestore';
-import { createDocument, updateDocument, deleteDocument, useDocumentData, useCollectionData } from './base';
-import type { Enrollment } from '@/types';
-import type { PaginationParams } from '@/types';
-
-const COLLECTION_NAME = 'enrollments';
+import { collection, doc, addDoc, updateDoc, deleteDoc, where, orderBy, limit } from 'firebase/firestore';
+import { db } from './config';
+import { Enrollment } from '@/types';
+import { getDocument, getDocuments } from './utils';
 
 export const enrollmentApi = {
-  create: (data: Omit<Enrollment, 'id'>) => createDocument<Enrollment>(COLLECTION_NAME, data),
-  
-  update: (id: string, data: Partial<Enrollment>) => 
-    updateDocument<Enrollment>(COLLECTION_NAME, id, data),
-  
-  delete: (id: string) => deleteDocument(COLLECTION_NAME, id),
-  
-  get: (id: string) => useDocumentData<Enrollment>(COLLECTION_NAME, id),
-  
-  list: (params: PaginationParams = {}) => {
+  async get(id: string): Promise<Enrollment | null> {
+    return getDocument<Enrollment>('enrollments', id);
+  },
+
+  async list(params: { sortBy?: string; sortOrder?: 'asc' | 'desc'; pageSize?: number } = {}): Promise<Enrollment[]> {
     const constraints = [];
+    
     if (params.sortBy) {
       constraints.push(orderBy(params.sortBy, params.sortOrder || 'desc'));
     }
+    
     if (params.pageSize) {
       constraints.push(limit(params.pageSize));
     }
-    return useCollectionData<Enrollment>(COLLECTION_NAME, constraints);
+    
+    return getDocuments<Enrollment>('enrollments', constraints);
   },
-  
-  getUserEnrollments: (userId: string) => {
+
+  async getUserEnrollments(userId: string): Promise<Enrollment[]> {
     const constraints = [where('userId', '==', userId)];
-    return useCollectionData<Enrollment>(COLLECTION_NAME, constraints);
+    return getDocuments<Enrollment>('enrollments', constraints);
   },
-  
-  getCourseEnrollments: (courseId: string) => {
+
+  async getCourseEnrollments(courseId: string): Promise<Enrollment[]> {
     const constraints = [where('courseId', '==', courseId)];
-    return useCollectionData<Enrollment>(COLLECTION_NAME, constraints);
+    return getDocuments<Enrollment>('enrollments', constraints);
   },
-  
-  getByStatus: (status: Enrollment['status']) => {
+
+  async getByStatus(status: string): Promise<Enrollment[]> {
     const constraints = [where('status', '==', status)];
-    return useCollectionData<Enrollment>(COLLECTION_NAME, constraints);
+    return getDocuments<Enrollment>('enrollments', constraints);
   },
+
+  async create(data: Omit<Enrollment, 'id'>): Promise<Enrollment> {
+    const docRef = await addDoc(collection(db, 'enrollments'), data);
+    return { id: docRef.id, ...data };
+  },
+
+  async update(id: string, data: Partial<Enrollment>): Promise<void> {
+    const docRef = doc(db, 'enrollments', id);
+    await updateDoc(docRef, data);
+  },
+
+  async delete(id: string): Promise<void> {
+    const docRef = doc(db, 'enrollments', id);
+    await deleteDoc(docRef);
+  }
 }; 

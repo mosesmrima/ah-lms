@@ -1,43 +1,54 @@
-import { orderBy, limit, where } from 'firebase/firestore';
-import { createDocument, updateDocument, deleteDocument, useDocumentData, useCollectionData } from './base';
-import type { Course } from '@/types';
-import type { PaginationParams } from '@/types';
-
-const COLLECTION_NAME = 'courses';
+import { collection, doc, addDoc, updateDoc, deleteDoc, where, orderBy, limit } from 'firebase/firestore';
+import { db } from './config';
+import { Course } from '@/types';
+import { getDocument, getDocuments } from './utils';
 
 export const courseApi = {
-  create: (data: Omit<Course, 'id'>) => createDocument<Course>(COLLECTION_NAME, data),
-  
-  update: (id: string, data: Partial<Course>) => 
-    updateDocument<Course>(COLLECTION_NAME, id, data),
-  
-  delete: (id: string) => deleteDocument(COLLECTION_NAME, id),
-  
-  get: (id: string) => useDocumentData<Course>(COLLECTION_NAME, id),
-  
-  list: (params: PaginationParams = {}) => {
+  async get(id: string): Promise<Course | null> {
+    return getDocument<Course>('courses', id);
+  },
+
+  async list(params: { sortBy?: string; sortOrder?: 'asc' | 'desc'; pageSize?: number } = {}): Promise<Course[]> {
     const constraints = [];
+    
     if (params.sortBy) {
       constraints.push(orderBy(params.sortBy, params.sortOrder || 'desc'));
     }
+    
     if (params.pageSize) {
       constraints.push(limit(params.pageSize));
     }
-    return useCollectionData<Course>(COLLECTION_NAME, constraints);
+    
+    return getDocuments<Course>('courses', constraints);
   },
-  
-  getByInstructor: (instructorId: string) => {
+
+  async getByInstructor(instructorId: string): Promise<Course[]> {
     const constraints = [where('instructorId', '==', instructorId)];
-    return useCollectionData<Course>(COLLECTION_NAME, constraints);
+    return getDocuments<Course>('courses', constraints);
   },
-  
-  getByCategory: (category: string) => {
+
+  async getByCategory(category: string): Promise<Course[]> {
     const constraints = [where('category', '==', category)];
-    return useCollectionData<Course>(COLLECTION_NAME, constraints);
+    return getDocuments<Course>('courses', constraints);
   },
-  
-  getPublished: () => {
+
+  async getPublished(): Promise<Course[]> {
     const constraints = [where('status', '==', 'published')];
-    return useCollectionData<Course>(COLLECTION_NAME, constraints);
+    return getDocuments<Course>('courses', constraints);
   },
+
+  async create(data: Omit<Course, 'id'>): Promise<Course> {
+    const docRef = await addDoc(collection(db, 'courses'), data);
+    return { id: docRef.id, ...data };
+  },
+
+  async update(id: string, data: Partial<Course>): Promise<void> {
+    const docRef = doc(db, 'courses', id);
+    await updateDoc(docRef, data);
+  },
+
+  async delete(id: string): Promise<void> {
+    const docRef = doc(db, 'courses', id);
+    await deleteDoc(docRef);
+  }
 }; 

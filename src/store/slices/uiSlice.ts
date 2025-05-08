@@ -1,4 +1,5 @@
-import { StateCreator } from 'zustand';
+import { create, StateCreator } from 'zustand';
+import { devtools } from 'zustand/middleware';
 
 export interface UISlice {
   // UI state
@@ -9,25 +10,43 @@ export interface UISlice {
   // UI actions
   setTheme: (theme: 'light' | 'dark' | 'system') => void;
   setSidebarOpen: (open: boolean) => void;
-  setLoading: (isLoading: boolean) => void;
+  setLoading: (loading: boolean) => void;
   toggleSidebar: () => void;
   toggleTheme: () => void;
 }
 
-export const createUISlice: StateCreator<UISlice> = (set, get) => ({
-  // Initial state
-  theme: 'system',
+export const createUISlice = (set: Parameters<StateCreator<UISlice>>[0]): UISlice => ({
+  theme: 'system' as const,
   sidebarOpen: false,
   isLoading: false,
-  
-  // Actions
-  setTheme: (theme) => set({ theme }),
-  setSidebarOpen: (sidebarOpen) => set({ sidebarOpen }),
-  setLoading: (isLoading) => set({ isLoading }),
-  
-  // Toggle actions
-  toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
-  toggleTheme: () => set((state) => ({
+  setTheme: (theme: 'light' | 'dark' | 'system') => set({ theme }),
+  setSidebarOpen: (open: boolean) => set({ sidebarOpen: open }),
+  setLoading: (loading: boolean) => set({ isLoading: loading }),
+  toggleSidebar: () => set((state: UISlice) => ({ sidebarOpen: !state.sidebarOpen })),
+  toggleTheme: () => set((state: UISlice) => ({
     theme: state.theme === 'light' ? 'dark' : 'light'
   })),
-}); 
+});
+
+export const useUIStore = create<UISlice>()(
+  devtools(
+    (set) => ({
+      // Initial state
+      theme: 'system',
+      sidebarOpen: false,
+      isLoading: false,
+      
+      // Actions
+      setTheme: (theme) => set({ theme }),
+      setSidebarOpen: (sidebarOpen) => set({ sidebarOpen }),
+      setLoading: (isLoading) => set({ isLoading }),
+      
+      // Toggle actions
+      toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
+      toggleTheme: () => set((state) => ({
+        theme: state.theme === 'light' ? 'dark' : 'light'
+      })),
+    }),
+    { name: 'ui-store' }
+  )
+); 

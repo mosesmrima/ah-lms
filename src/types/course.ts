@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { User } from './user';
 
 // Course category enum
 export const CourseCategory = {

@@ -27,10 +27,10 @@ const SignUpModal = ({ isOpen, onClose, onOpenLogin }: SignUpModalProps) => {
         color: "success"
       });
       onClose();
-    } catch (error: any) {
+    } catch (error: unknown) {
       addToast({
         title: "Error",
-        description: error.message || 'Failed to create account',
+        description: error instanceof Error ? error.message : 'Failed to create account',
         color: "danger"
       });
     }
@@ -45,10 +45,10 @@ const SignUpModal = ({ isOpen, onClose, onOpenLogin }: SignUpModalProps) => {
         color: "success"
       });
       onClose();
-    } catch (error: any) {
+    } catch (error: unknown) {
       addToast({
         title: "Error",
-        description: error.message || 'Failed to sign up with Google',
+        description: error instanceof Error ? error.message : 'Failed to sign up with Google',
         color: "danger"
       });
     }
