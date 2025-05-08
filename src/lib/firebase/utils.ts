@@ -10,10 +10,34 @@ import {
   startAfter,
   DocumentSnapshot,
   QueryConstraint,
+  Query,
+  CollectionReference
 } from 'firebase/firestore';
-import { db } from './config';
+import { 
+  signInWithEmailAndPassword as firebaseSignIn,
+  createUserWithEmailAndPassword as firebaseCreateUser,
+  GoogleAuthProvider,
+  signInWithPopup
+} from 'firebase/auth';
+import { db, auth } from './config';
 import type { Course, Enrollment, User, Event } from '@/types';
 import type { PaginationParams } from '@/types';
+
+// Auth functions
+export const signInWithEmailAndPassword = async (email: string, password: string) => {
+  return firebaseSignIn(auth, email, password);
+};
+
+export const createUserWithEmailAndPassword = async (email: string, password: string, fullName: string) => {
+  const result = await firebaseCreateUser(auth, email, password);
+  // You might want to update the user's display name here
+  return result;
+};
+
+export const signInWithGoogle = async () => {
+  const provider = new GoogleAuthProvider();
+  return signInWithPopup(auth, provider);
+};
 
 // Generic function to get a document by ID
 export const getDocument = async <T>(
@@ -37,30 +61,24 @@ export const getDocument = async <T>(
 // Generic function to get documents with pagination
 export const getDocuments = async <T>(
   collectionName: string,
-  constraints: QueryConstraint[] = [],
-  lastDoc?: DocumentSnapshot
+  constraints: QueryConstraint[] = []
 ): Promise<{ items: T[]; lastDoc: DocumentSnapshot | null }> => {
   try {
-    let q = collection(db, collectionName);
+    let q: Query = collection(db, collectionName);
     
     if (constraints.length > 0) {
       q = query(q, ...constraints);
     }
     
-    if (lastDoc) {
-      q = query(q, startAfter(lastDoc));
-    }
+    const querySnapshot = await getDocs(q);
+    const lastDoc = querySnapshot.docs[querySnapshot.docs.length - 1] || null;
     
-    const snapshot = await getDocs(q);
-    const items = snapshot.docs.map(doc => ({
+    const items = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     })) as T[];
     
-    return {
-      items,
-      lastDoc: snapshot.docs[snapshot.docs.length - 1] || null
-    };
+    return { items, lastDoc };
   } catch (error) {
     console.error(`Error fetching ${collectionName} documents:`, error);
     throw error;

@@ -26,16 +26,6 @@ export interface User {
   role: 'student' | 'instructor' | 'admin';
 }
 
-export interface Event {
-  id: string;
-  title: string;
-  description: string;
-  date: string;
-  location: string;
-  imageUrl: string;
-  registrationUrl?: string;
-}
-
 export interface FAQ {
   question: string;
   answer: string;

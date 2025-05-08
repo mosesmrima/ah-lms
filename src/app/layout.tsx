@@ -1,4 +1,6 @@
-import type { Metadata } from "next";
+'use client';
+
+import { QueryProvider } from '@/providers/QueryProvider';
 import { Geist, Geist_Mono } from "next/font/google";
 import { Providers } from "./providers";
 import "./globals.css";
@@ -13,20 +15,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Africa Tech LMS",
-  description: "Learning Management System for Africa Tech",
-  icons: {
-    icon: [
-      { url: '/images/IMG_0955-Photoroom%201.png' },
-      { url: '/images/IMG_0955-Photoroom%201.png', type: 'image/png', sizes: '32x32' },
-    ],
-    apple: [
-      { url: '/images/IMG_0955-Photoroom%201.png' },
-    ],
-  },
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -35,7 +23,11 @@ export default function RootLayout({
   return (
 		<html lang="en" className="dark" style={{ colorScheme: 'dark' }}>
 			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-				<Providers>{children}</Providers>
+				<QueryProvider>
+					<Providers>
+						{children}
+					</Providers>
+				</QueryProvider>
 			</body>
 		</html>
 	);
