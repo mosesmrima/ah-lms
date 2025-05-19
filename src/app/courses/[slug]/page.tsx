@@ -15,6 +15,7 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import VideoPlayer from '@/components/courses/VideoPlayer';
+import { OverviewTab, CurriculumTab, QuizTab, RatingsTab, CrafterTab } from '@/components/courses/tabs';
 
 // Mock data for the Data Security course
 const courseData = {
@@ -98,7 +99,6 @@ const courseData = {
     "Hands-On Labs"
   ]
 };
-
 
 // Define types for curriculum data
 interface Lecture {
@@ -242,7 +242,7 @@ function SectionSummary({ sectionIndex, lectureIndex, curriculum }: SectionSumma
         
         <div className="flex items-center">
           <svg className="w-4 h-4 mr-2 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 100-12 6 6 0 000 12z" clipRule="evenodd" />
+            <path fillRule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" />
           </svg>
           <span className="text-sm text-gray-300">{section.meta}</span>
         </div>
@@ -377,28 +377,6 @@ export default function CourseDetails() {
   // In a real app, you would fetch course data based on the slug
   // For now, we'll use our mock data
   const course = courseData;
-  // Sample quizzes for the Course Quizzes tab
-  const sampleQuizzes = [
-    { id: 1, title: "Basics of Data Security", questions: 10 },
-    { id: 2, title: "Encryption Techniques", questions: 8 },
-    { id: 3, title: "Access Control Principles", questions: 12 },
-    { id: 4, title: "Incident Response Scenarios", questions: 6 }
-  ];
-  // Sample ratings for the Student Ratings tab
-  const sampleRatings = [
-    {
-      name: "Billy John",
-      avatar: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&w=160&h=160&fit=facearea&facepad=2.5",
-      rating: 5,
-      review: "Explore a wealth of learning opportunities with our diverse selection of webinars, thought-provoking podcasts,",
-    },
-    {
-      name: "Nelson Kim",
-      avatar: "https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg?auto=compress&w=160&h=160&fit=facearea&facepad=2.5",
-      rating: 4,
-      review: "Explore a wealth of learning opportunities with our diverse selection of webinars, thought-provoking podcasts,",
-    },
-  ];
 
   return (
     <div className="min-h-screen flex flex-col bg-black text-white">
@@ -541,6 +519,12 @@ export default function CourseDetails() {
             Curriculum
           </button>
           <button 
+            className={`rounded-full whitespace-nowrap px-3 py-1.5 text-sm sm:text-base font-bold transition-all border ${activeTab === 'crafter' ? 'bg-[#222] border-red-500 text-red-500' : 'bg-transparent border-transparent text-white hover:text-red-500'}`}
+            onClick={() => setActiveTab('crafter')}
+          >
+            Crafter
+          </button>
+          <button 
             className={`rounded-full whitespace-nowrap px-3 py-1.5 text-sm sm:text-base font-bold transition-all border ${activeTab === 'quiz' ? 'bg-[#222] border-red-500 text-red-500' : 'bg-transparent border-transparent text-white hover:text-red-500'}`}
             onClick={() => setActiveTab('quiz')}
           >
@@ -557,102 +541,15 @@ export default function CourseDetails() {
       </div>
       
       <div className="container mx-auto px-4 py-8">
-        {activeTab === 'overview' && (
-          <div>
-            <div className="bg-[#1A1A1A] rounded-lg p-6 my-8">
-              <h2 className="text-xl font-semibold mb-4">What you&apos;ll learn</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {course.whatYouWillLearn.map((item, index) => (
-                  <div key={index} className="flex items-start">
-                    <svg className="w-5 h-5 text-green-500 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span>{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            <div className="mb-8">
-              <h2 className="text-xl font-semibold mb-4">Requirements</h2>
-              <ul className="list-disc pl-5 space-y-2">
-                {course.requirements.map((req, index) => (
-                  <li key={index}>{req}</li>
-                ))}
-              </ul>
-            </div>
-            
-            <div className="mb-8">
-              <h2 className="text-xl font-semibold mb-4">Description</h2>
-              <div className="whitespace-pre-line text-gray-300">
-                {course.description_full}
-              </div>
-            </div>
-          </div>
-        )}
+        {activeTab === 'overview' && <OverviewTab />}
         
-        {activeTab === 'curriculum' && (
-          <div className="py-6">
-            {/* Curriculum with Summary and Accordion */}
-            <CurriculumSection />
-          </div>
-        )}
+        {activeTab === 'curriculum' && <CurriculumTab />}
         
-        {activeTab === 'quiz' && (
-          <div className="bg-[#1A1A1A] rounded-lg p-6 mt-6">
-            <h2 className="text-xl font-semibold mb-4">Course Quizzes</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {sampleQuizzes.map((quiz) => (
-                <div key={quiz.id} className="bg-[#222] p-4 rounded-lg flex flex-col justify-between">
-                  <h3 className="text-lg font-semibold text-white mb-2">{quiz.title}</h3>
-                  <p className="text-gray-400 mb-4">{quiz.questions} Questions</p>
-                  <button
-                    onClick={() => alert(`Starting quiz: ${quiz.title}`)}
-                    className="mt-auto bg-red-600 hover:bg-red-700 text-white py-2 rounded transition"
-                  >
-                    Start Quiz
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        {activeTab === 'crafter' && <CrafterTab />}
         
-        {activeTab === 'ratings' && (
-          <div className="bg-[#1A1A1A] rounded-lg p-6 mt-6">
-            <h2 className="text-xl font-semibold mb-4">Student Ratings</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {sampleRatings.map((r, idx) => (
-                <div key={idx} className="flex bg-[#232323] rounded-xl p-4 items-start">
-                  <Image
-                    src={r.avatar}
-                    alt={`Avatar for ${r.name}`}
-                    width={64}
-                    height={64}
-                    className="rounded-xl object-cover mr-4 border-2 border-red-600"
-                    priority
-                  />
-                  <div>
-                    <div className="font-bold text-white mb-1">{r.name}</div>
-                    <div className="flex items-center mb-2">
-                      {[...Array(5)].map((_, i) => (
-                        <svg
-                          key={i}
-                          className={`w-5 h-5 ${i < r.rating ? "text-red-500" : "text-gray-400"}`}
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.975a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.385 2.46a1 1 0 00-.364 1.118l1.287 3.976c.3.921-.755 1.688-1.538 1.118l-3.385-2.46a1 1 0 00-1.175 0l-3.385 2.46c-.783.57-1.838-.197-1.538-1.118l1.287-3.976a1 1 0 00-.364-1.118L2.045 9.402c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.975z" />
-                        </svg>
-                      ))}
-                    </div>
-                    <div className="text-gray-200">{r.review}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        {activeTab === 'quiz' && <QuizTab />}
+        
+        {activeTab === 'ratings' && <RatingsTab />}
         
         {/* Related Courses Section: always visible below tabs */}
         <div className="mt-16">

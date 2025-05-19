@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import CalendarIcon from "../icons/CalendarIcon";
+import { CalendarIcon } from '@heroicons/react/24/outline';
 
 interface CourseCardProps {
   id: number;
@@ -17,8 +17,8 @@ const ScheduleCard = ({ title, description }: { title: string; description: stri
   return (
     <div className="self-stretch h-56 px-6 py-16 bg-stone-900 rounded-xl outline outline-1 outline-offset-[-1px] outline-stone-900 inline-flex flex-col justify-center items-center gap-2.5">
       <div className="self-stretch inline-flex justify-start items-center gap-12">
-        <div className="flex-shrink-0 mr-4">
-          <CalendarIcon />
+        <div className="flex-shrink-0 mr-4 text-red-500">
+          <CalendarIcon className="w-12 h-12" />
         </div>
         <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
           <div className="self-stretch justify-start text-white text-base font-bold font-['helvetica'] tracking-tight">{title}</div>
