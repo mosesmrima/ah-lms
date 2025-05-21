@@ -36,7 +36,7 @@ const DashboardNavbar = ({ user }: DashboardNavbarProps) => {
 
   return (
     <>
-      <nav className="w-full py-4 md:py-6 bg-black text-white border-b border-[#4f4f4f] sticky top-0 z-50">
+      <nav className="w-full h-16 py-4 md:py-0 bg-black text-white border-b border-[#4f4f4f] sticky top-0 z-50 flex items-center">
         <div className="container mx-auto flex items-center justify-between px-4 sm:px-6 md:px-12">
           <div className="flex items-center">
             <Link href="/">

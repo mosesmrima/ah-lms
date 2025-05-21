@@ -1,8 +1,9 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { PageLayout } from '@/components/layout';
 import { CourseCard } from '@/components/courses';
+import { Pagination } from '@/components/ui';
 import PageTransition from '@/components/animations/PageTransition';
 import AnimateOnScroll from '@/components/animations/AnimateOnScroll';
 import StaggeredAnimation from '@/components/animations/StaggeredAnimation';
@@ -10,12 +11,22 @@ import StaggeredAnimation from '@/components/animations/StaggeredAnimation';
 // Using the shared CourseCard component from src/components/courses/CourseCard.tsx
 
 export default function CoursesPage() {
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 5; // Example total pages
+
   // Course data
   const courses = Array(6).fill({
     title: 'Data Security',
     instructor: 'Madison Blue',
     image: '/images/User on laptop.png',
   });
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // Here you would typically fetch data for the new page
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // Filter categories
   const categories = [
@@ -149,24 +160,13 @@ export default function CoursesPage() {
               </StaggeredAnimation>
               
               {/* Pagination */}
-              <AnimateOnScroll direction="up" delay={0.3} className="flex flex-wrap justify-center mt-16 mb-8 gap-2 md:gap-3">
-                <button className="px-3 sm:px-4 py-2 border border-gray-600 rounded-md hover:bg-gray-800 hover:border-[#E7343A] transition-colors duration-300 flex items-center text-sm sm:text-base">
-                  <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-                  </svg>
-                  First
-                </button>
-                <button className="px-3 sm:px-4 py-2 bg-[#E7343A] rounded-md hover:bg-[#c62d32] transition-colors duration-300 font-medium text-sm sm:text-base min-w-[32px] sm:min-w-[40px]">1</button>
-                <button className="px-3 sm:px-4 py-2 border border-gray-600 rounded-md hover:bg-gray-800 hover:border-[#E7343A] transition-colors duration-300 text-sm sm:text-base min-w-[32px] sm:min-w-[40px]">2</button>
-                <button className="px-3 sm:px-4 py-2 border border-gray-600 rounded-md hover:bg-gray-800 hover:border-[#E7343A] transition-colors duration-300 text-sm sm:text-base min-w-[32px] sm:min-w-[40px]">3</button>
-                <button className="hidden sm:block px-3 sm:px-4 py-2 border border-gray-600 rounded-md hover:bg-gray-800 hover:border-[#E7343A] transition-colors duration-300 text-sm sm:text-base min-w-[32px] sm:min-w-[40px]">4</button>
-                <button className="hidden sm:block px-3 sm:px-4 py-2 border border-gray-600 rounded-md hover:bg-gray-800 hover:border-[#E7343A] transition-colors duration-300 text-sm sm:text-base min-w-[32px] sm:min-w-[40px]">5</button>
-                <button className="px-3 sm:px-4 py-2 border border-gray-600 rounded-md hover:bg-gray-800 hover:border-[#E7343A] transition-colors duration-300 flex items-center text-sm sm:text-base">
-                  Last
-                  <svg className="w-3 h-3 sm:w-4 sm:h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-                  </svg>
-                </button>
+              <AnimateOnScroll direction="up" delay={0.3} className="mt-16 mb-8 border-0">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                  className="justify-center"
+                />
               </AnimateOnScroll>
             </div>
           </div>
