@@ -1,11 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { useUserStore } from '@/store';
 import { auth } from '@/lib/firebase/config';
 import dynamic from 'next/dynamic';
-import type { User } from '@/types'; // Import User type if not already imported
-import Sidebar from '@/components/layout/Sidebar'; // Import the new Sidebar
+import type { User } from '@/types';
+import Sidebar from '@/components/layout/Sidebar';
 
 // Dynamically import DashboardNavbar to avoid SSR issues
 const DashboardNavbar = dynamic(
@@ -53,6 +54,8 @@ export default function ManagerDashboardLayout({
     checkAuth();
   }, [setUser]);
 
+  const pathname = usePathname();
+  
   if (isLoading) {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
@@ -62,9 +65,14 @@ export default function ManagerDashboardLayout({
   }
 
   // Determine activePage based on the current route
-  // For now, hardcoding to 'dashboard' for demonstration
-  // You'll need to implement logic to derive this from `router.pathname` or similar
-  const activePage: 'dashboard' | 'my-courses' | 'happenings' | 'analytics' = 'dashboard'; 
+  const getActivePage = (): 'dashboard' | 'my-courses' | 'happenings' | 'analytics' => {
+    if (pathname.includes('/my-courses')) return 'my-courses';
+    if (pathname.includes('/happenings')) return 'happenings';
+    if (pathname.includes('/analytics')) return 'analytics';
+    return 'dashboard'; // Default to dashboard
+  };
+  
+  const activePage = getActivePage();
 
   const userInitials = user?.name
     ?.split(' ')

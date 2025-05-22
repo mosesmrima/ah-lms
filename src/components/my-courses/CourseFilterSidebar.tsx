@@ -17,7 +17,7 @@ const categoriesData: Category[] = [
 
 const CourseFilterSidebar: React.FC = () => {
   return (
-    <aside className="bg-neutral-800 p-6 rounded-lg h-fit">
+    <aside className="bg-neutral-800 p-6 rounded-lg h-full flex flex-col">
       <div className="relative mb-6">
         <input
           type="text"
@@ -26,7 +26,7 @@ const CourseFilterSidebar: React.FC = () => {
         />
         <MagnifyingGlassIcon className="h-5 w-5 text-neutral-400 absolute left-3 top-1/2 -translate-y-1/2" />
       </div>
-      <div className="space-y-4">
+      <div className="space-y-4 flex-1 overflow-y-auto">
         {categoriesData.map((category) => (
           <label key={category.id} className="flex items-center justify-between text-neutral-300 hover:text-white cursor-pointer">
             <div className="flex items-center">

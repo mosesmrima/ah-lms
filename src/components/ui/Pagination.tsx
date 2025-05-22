@@ -35,7 +35,7 @@ const Pagination: React.FC<PaginationProps> = ({
   if (totalPages <= 1) return null;
 
   return (
-    <nav className={`flex items-center justify-center space-x-1 sm:space-x-2 text-sm text-neutral-400 ${className}`}>
+    <nav className={`flex items-center justify-center space-x-1 sm:space-x-2 text-sm text-neutral-400 !border-b-0 ${className}`} style={{ borderBottom: 'none !important' }}>
       <button
         onClick={() => onPageChange(1)}
         disabled={currentPage === 1}

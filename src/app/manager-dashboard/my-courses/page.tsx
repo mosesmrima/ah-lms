@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import CreateCourseModal from '@/components/modals/CreateCourseModal';
 import {
   CoursesOverview,
   CourseFilterSidebar,
@@ -53,24 +54,33 @@ const MyCoursesPage: React.FC = () => {
     },
   ];
 
+  const [isCreateCourseModalOpen, setIsCreateCourseModalOpen] = useState(false);
+
   return (
-    <div>
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <CreateCourseModal 
+        isOpen={isCreateCourseModalOpen} 
+        onClose={() => setIsCreateCourseModalOpen(false)} 
+      />
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
         <h1 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-0">Courses Overview</h1>
-        <button className="bg-[#E7343A] hover:bg-red-700 text-white font-semibold py-2.5 px-6 rounded-lg text-sm sm:text-base">
+        <button 
+          onClick={() => setIsCreateCourseModalOpen(true)}
+          className="bg-[#E7343A] hover:bg-red-700 text-white font-semibold py-2.5 px-6 rounded-lg text-sm sm:text-base"
+        >
           Create Course
         </button>
       </header>
 
       <CoursesOverview />
 
-      <section className="mt-10 md:mt-12 border-0">
+      <section className="mt-10 md:mt-12 border-0 bg-neutral-800/50 rounded-xl p-6">
         <h2 className="text-xl sm:text-2xl font-bold text-white mb-6">My Courses</h2>
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-1">
             <CourseFilterSidebar />
           </div>
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-3 min-h-[60vh]">
             {courses.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {courses.map((course) => (
