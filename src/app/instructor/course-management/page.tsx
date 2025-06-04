@@ -1,33 +1,26 @@
 "use client";
 import React, { useState } from 'react';
 import { useCourses } from '@/hooks/useCourses';
-import CourseCard from '@/components/courses/CourseCard';
+import CourseCard from '@/components/my-courses/CourseCard';
 import { Button } from '@/components/ui/Button';
 import { Modal, ModalContent, ModalHeader, ModalBody } from '@heroui/react';
-import type { Course } from '@/types/course';
+import type { Course } from '@/types';
 import { CourseCategory, CourseLevel, CourseStatus } from '@/types/course';
 
 const emptyCourse: Omit<Course, 'id'> = {
   title: '',
-  slug: '',
   description: '',
-  shortDescription: '',
   instructor: '',
-  category: CourseCategory.TECHNOLOGY,
-  level: CourseLevel.BEGINNER,
-  status: CourseStatus.DRAFT,
-  thumbnailUrl: '',
+  duration: '00:00:00',
+  level: 'Beginner',
   price: 0,
-  currency: 'USD',
-  lessons: [],
+  imageUrl: '',
+  category: 'Technology',
+  lessons: 0,
   enrolledStudents: 0,
   rating: 0,
   totalRatings: 0,
-  requirements: [],
-  objectives: [],
-  tags: [],
-  createdAt: new Date(),
-  updatedAt: new Date(),
+  tags: []
 };
 
 export default function CourseManagementPage() {
@@ -66,26 +59,16 @@ export default function CourseManagementPage() {
     const { name, value } = e.target;
     setForm(prev => ({
       ...prev,
-      [name]: value,
-      // Update slug when title changes
-      ...(name === 'title' ? { slug: value.toLowerCase().replace(/\s+/g, '-') } : {}),
-      // Update timestamps
-      updatedAt: new Date()
+      [name]: value
     }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const courseData = {
-      ...form,
-      createdAt: modalMode === 'add' ? new Date() : form.createdAt,
-      updatedAt: new Date()
-    };
-    
     if (modalMode === 'add') {
-      createCourse(courseData);
+      createCourse(form);
     } else if (modalMode === 'edit' && selectedCourse) {
-      updateCourse({ id: selectedCourse.id, data: courseData });
+      updateCourse({ id: selectedCourse.id, data: form });
     }
     setIsModalOpen(false);
   };
@@ -110,9 +93,9 @@ export default function CourseManagementPage() {
               <CourseCard
                 title={course.title}
                 description={course.description}
-                modules={course.lessons?.length || 0}
-                duration="0h 0m"
-                imageUrl={course.thumbnailUrl}
+                modules={course.lessons || 0}
+                duration={course.duration}
+                imageUrl={course.imageUrl}
               />
               <div className="flex gap-2 mt-2">
                 <Button size="sm" customVariant="secondary" onClick={() => openEditModal(course)}>Edit</Button>
@@ -152,11 +135,12 @@ export default function CourseManagementPage() {
                   />
                   <input
                     type="text"
-                    name="thumbnailUrl"
-                    placeholder="Thumbnail URL"
+                    name="imageUrl"
+                    placeholder="Image URL"
                     className="w-full rounded-lg bg-[#222222] p-4 text-white outline-none"
-                    value={form.thumbnailUrl}
+                    value={form.imageUrl}
                     onChange={handleFormChange}
+                    required
                   />
                   <Button type="submit" customVariant="primary" fullWidth disabled={isCreating || isUpdating}>
                     {modalMode === 'add' ? (isCreating ? 'Creating...' : 'Create') : (isUpdating ? 'Updating...' : 'Update')}
