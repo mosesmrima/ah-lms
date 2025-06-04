@@ -4,7 +4,6 @@ import { getFirestore } from 'firebase/firestore';
 // import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-
   apiKey: "AIzaSyD0g9XkaGWdLHpYXUWfayAWGztS70Lr0S8",
   authDomain: "ahlms-ddef5.firebaseapp.com",
   projectId: "ahlms-ddef5",
