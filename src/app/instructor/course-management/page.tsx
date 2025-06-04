@@ -63,15 +63,29 @@ export default function CourseManagementPage() {
   }, [modalMode, selectedCourse, isModalOpen]);
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm(prev => ({
+      ...prev,
+      [name]: value,
+      // Update slug when title changes
+      ...(name === 'title' ? { slug: value.toLowerCase().replace(/\s+/g, '-') } : {}),
+      // Update timestamps
+      updatedAt: new Date()
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const courseData = {
+      ...form,
+      createdAt: modalMode === 'add' ? new Date() : form.createdAt,
+      updatedAt: new Date()
+    };
+    
     if (modalMode === 'add') {
-      createCourse(form);
+      createCourse(courseData);
     } else if (modalMode === 'edit' && selectedCourse) {
-      updateCourse({ id: selectedCourse.id, data: form });
+      updateCourse({ id: selectedCourse.id, data: courseData });
     }
     setIsModalOpen(false);
   };
