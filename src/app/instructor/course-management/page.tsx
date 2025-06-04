@@ -1,32 +1,50 @@
 "use client";
 import React, { useState } from 'react';
 import { useCourses } from '@/hooks/useCourses';
-import  CourseCard  from '@/components/courses/CourseCard';
+import CourseCard from '@/components/courses/CourseCard';
 import { Button } from '@/components/ui/Button';
 import { Modal, ModalContent, ModalHeader, ModalBody } from '@heroui/react';
 import type { Course } from '@/types/course';
+import { CourseCategory, CourseLevel, CourseStatus } from '@/types/course';
 
-const emptyCourse = {
+const emptyCourse: Omit<Course, 'id'> = {
   title: '',
+  slug: '',
   description: '',
-  image: '',
+  shortDescription: '',
+  instructor: '',
+  category: CourseCategory.TECHNOLOGY,
+  level: CourseLevel.BEGINNER,
+  status: CourseStatus.DRAFT,
+  thumbnailUrl: '',
+  price: 0,
+  currency: 'USD',
+  lessons: [],
+  enrolledStudents: 0,
+  rating: 0,
+  totalRatings: 0,
+  requirements: [],
+  objectives: [],
+  tags: [],
+  createdAt: new Date(),
+  updatedAt: new Date(),
 };
 
 export default function CourseManagementPage() {
   const { courses, createCourse, updateCourse, deleteCourse, isCreating, isUpdating, isDeleting } = useCourses();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<'add' | 'edit'>("add");
-  const [selectedCourse, setSelectedCourse] = useState<any>(emptyCourse);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   // Handlers
   const openAddModal = () => {
     setModalMode('add');
-    setSelectedCourse(emptyCourse);
+    setSelectedCourse(null);
     setIsModalOpen(true);
   };
-  const openEditModal = (course: any) => {
+  const openEditModal = (course: Course) => {
     setModalMode('edit');
     setSelectedCourse(course);
     setIsModalOpen(true);
@@ -39,9 +57,9 @@ export default function CourseManagementPage() {
   const handleDeleteModalClose = () => setIsDeleteModalOpen(false);
 
   // Form state
-  const [form, setForm] = useState(emptyCourse);
+  const [form, setForm] = useState<Omit<Course, 'id'>>(emptyCourse);
   React.useEffect(() => {
-    setForm(modalMode === 'edit' ? selectedCourse : emptyCourse);
+    setForm(modalMode === 'edit' && selectedCourse ? selectedCourse : emptyCourse);
   }, [modalMode, selectedCourse, isModalOpen]);
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -52,7 +70,7 @@ export default function CourseManagementPage() {
     e.preventDefault();
     if (modalMode === 'add') {
       createCourse(form);
-    } else if (modalMode === 'edit') {
+    } else if (modalMode === 'edit' && selectedCourse) {
       updateCourse({ id: selectedCourse.id, data: form });
     }
     setIsModalOpen(false);
@@ -67,23 +85,26 @@ export default function CourseManagementPage() {
     <div className="container mx-auto py-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Manage Your Courses</h1>
-        <Button variant="primary" onClick={openAddModal}>Add New Course</Button>
+        <Button customVariant="primary" onClick={openAddModal}>Add New Course</Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {courses.length === 0 ? (
           <div className="col-span-full text-center text-gray-400">No courses found.</div>
         ) : (
-          courses.map((course: any) => (
-            <CourseCard
-              key={course.id}
-              course={course}
-              actions={
-                <div className="flex gap-2 mt-2">
-                  <Button size="sm" variant="secondary" onClick={() => openEditModal(course)}>Edit</Button>
-                  <Button size="sm" variant="danger" onClick={() => openDeleteModal(course.id)}>Delete</Button>
-                </div>
-              }
-            />
+          courses.map((course) => (
+            <div key={course.id} className="flex flex-col">
+              <CourseCard
+                title={course.title}
+                description={course.description}
+                modules={course.lessons?.length || 0}
+                duration="0h 0m"
+                imageUrl={course.thumbnailUrl}
+              />
+              <div className="flex gap-2 mt-2">
+                <Button size="sm" customVariant="secondary" onClick={() => openEditModal(course)}>Edit</Button>
+                <Button size="sm" customVariant="primary" onClick={() => openDeleteModal(course.id)}>Delete</Button>
+              </div>
+            </div>
           ))
         )}
       </div>
@@ -117,13 +138,13 @@ export default function CourseManagementPage() {
                   />
                   <input
                     type="text"
-                    name="image"
-                    placeholder="Image URL"
+                    name="thumbnailUrl"
+                    placeholder="Thumbnail URL"
                     className="w-full rounded-lg bg-[#222222] p-4 text-white outline-none"
-                    value={form.image}
+                    value={form.thumbnailUrl}
                     onChange={handleFormChange}
                   />
-                  <Button type="submit" variant="primary" fullWidth disabled={isCreating || isUpdating}>
+                  <Button type="submit" customVariant="primary" fullWidth disabled={isCreating || isUpdating}>
                     {modalMode === 'add' ? (isCreating ? 'Creating...' : 'Create') : (isUpdating ? 'Updating...' : 'Update')}
                   </Button>
                 </form>
@@ -144,8 +165,8 @@ export default function CourseManagementPage() {
               <ModalBody className="p-6 pt-3">
                 <div className="mb-4 text-white">Are you sure you want to delete this course?</div>
                 <div className="flex gap-4">
-                  <Button variant="danger" onClick={handleDelete} fullWidth disabled={isDeleting}>Delete</Button>
-                  <Button variant="secondary" onClick={handleDeleteModalClose} fullWidth>Cancel</Button>
+                  <Button customVariant="primary" onClick={handleDelete} fullWidth disabled={isDeleting}>Delete</Button>
+                  <Button customVariant="secondary" onClick={handleDeleteModalClose} fullWidth>Cancel</Button>
                 </div>
               </ModalBody>
             </>
